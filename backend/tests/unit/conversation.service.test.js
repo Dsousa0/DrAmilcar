@@ -68,7 +68,7 @@ describe('appendMessages', () => {
   it('appends user and assistant messages and sets title from first user message', async () => {
     const userId = uid()
     const conv = await conversationService.createConversation(userId)
-    await conversationService.appendMessages(conv._id, 'Hello world question', 'Hello answer')
+    await conversationService.appendMessages(conv._id, userId, 'Hello world question', 'Hello answer')
     const updated = await conversationService.getConversation(userId, conv._id)
     expect(updated.messages).toHaveLength(2)
     expect(updated.messages[0].role).toBe('user')
@@ -81,8 +81,8 @@ describe('appendMessages', () => {
   it('does not overwrite an existing title on subsequent messages', async () => {
     const userId = uid()
     const conv = await conversationService.createConversation(userId)
-    await conversationService.appendMessages(conv._id, 'First question', 'First answer')
-    await conversationService.appendMessages(conv._id, 'Second question', 'Second answer')
+    await conversationService.appendMessages(conv._id, userId, 'First question', 'First answer')
+    await conversationService.appendMessages(conv._id, userId, 'Second question', 'Second answer')
     const updated = await conversationService.getConversation(userId, conv._id)
     expect(updated.title).toBe('First question')
     expect(updated.messages).toHaveLength(4)
@@ -92,7 +92,7 @@ describe('appendMessages', () => {
     const userId = uid()
     const conv = await conversationService.createConversation(userId)
     const longQuestion = 'A'.repeat(80)
-    await conversationService.appendMessages(conv._id, longQuestion, 'answer')
+    await conversationService.appendMessages(conv._id, userId, longQuestion, 'answer')
     const updated = await conversationService.getConversation(userId, conv._id)
     expect(updated.title).toHaveLength(60)
   })

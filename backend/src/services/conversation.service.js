@@ -15,26 +15,31 @@ async function getConversation(userId, conversationId) {
   return Conversation.findOne({ _id: conversationId, userId })
 }
 
-async function appendMessages(conversationId, userContent, assistantContent) {
+async function appendMessages(conversationId, userId, userContent, assistantContent) {
   const now = new Date()
+  const candidateTitle = userContent.trim().slice(0, 60)
 
   await Conversation.updateOne(
-    { _id: conversationId, title: '' },
-    { $set: { title: userContent.slice(0, 60) } }
-  )
-
-  await Conversation.updateOne(
-    { _id: conversationId },
-    {
-      $push: {
-        messages: {
-          $each: [
-            { role: 'user', content: userContent, createdAt: now },
-            { role: 'assistant', content: assistantContent, createdAt: now },
-          ],
+    { _id: conversationId, userId },
+    [
+      {
+        $set: {
+          title: {
+            $cond: [{ $eq: ['$title', ''] }, candidateTitle || 'Nova conversa', '$title'],
+          },
+          messages: {
+            $concatArrays: [
+              '$messages',
+              [
+                { role: 'user', content: userContent, createdAt: now },
+                { role: 'assistant', content: assistantContent, createdAt: now },
+              ],
+            ],
+          },
+          updatedAt: now,
         },
       },
-    }
+    ]
   )
 }
 
