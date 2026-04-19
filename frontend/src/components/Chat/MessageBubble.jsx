@@ -1,8 +1,25 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
+function ThinkingDots() {
+  return (
+    <span className="flex items-center gap-1 py-0.5">
+      <span className="text-xs text-gray-400 mr-1">Pensando</span>
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce"
+          style={{ animationDelay: `${i * 0.15}s` }}
+        />
+      ))}
+    </span>
+  )
+}
+
 export default function MessageBubble({ role, content }) {
   const isUser = role === 'user'
+  const isThinking = !isUser && content === ''
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
       <div
@@ -14,6 +31,8 @@ export default function MessageBubble({ role, content }) {
       >
         {isUser ? (
           <p className="whitespace-pre-wrap">{content}</p>
+        ) : isThinking ? (
+          <ThinkingDots />
         ) : (
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -31,7 +50,7 @@ export default function MessageBubble({ role, content }) {
               },
             }}
           >
-            {content || '▋'}
+            {content}
           </ReactMarkdown>
         )}
       </div>

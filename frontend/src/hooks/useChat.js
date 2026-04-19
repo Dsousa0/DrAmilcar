@@ -12,7 +12,6 @@ export function useChat() {
     setMessages((prev) => [...prev, { role: 'user', content: question }])
     setIsStreaming(true)
 
-    // Add empty assistant message to stream into
     setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
 
     try {
@@ -34,7 +33,7 @@ export function useChat() {
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
 
-      while (true) {
+      outer: while (true) {
         const { done, value } = await reader.read()
         if (done) break
 
@@ -44,28 +43,31 @@ export function useChat() {
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue
           const payload = line.slice(6).trim()
-          if (payload === '[DONE]') break
+          if (payload === '[DONE]') break outer
+
+          let parsed
           try {
-            const { token: chunk, error: streamError } = JSON.parse(payload)
-            if (streamError) throw new Error(streamError)
-            if (chunk) {
-              setMessages((prev) => {
-                const updated = [...prev]
-                updated[updated.length - 1] = {
-                  ...updated[updated.length - 1],
-                  content: updated[updated.length - 1].content + chunk,
-                }
-                return updated
-              })
-            }
+            parsed = JSON.parse(payload)
           } catch {
-            // malformed SSE line — skip
+            continue // malformed line — skip
+          }
+
+          if (parsed.error) throw new Error(parsed.error)
+
+          if (parsed.token) {
+            setMessages((prev) => {
+              const updated = [...prev]
+              updated[updated.length - 1] = {
+                ...updated[updated.length - 1],
+                content: updated[updated.length - 1].content + parsed.token,
+              }
+              return updated
+            })
           }
         }
       }
     } catch (err) {
       setError(err.message || 'Falha ao conectar com o servidor.')
-      // Remove the empty assistant message on error
       setMessages((prev) => prev.slice(0, -1))
     } finally {
       setIsStreaming(false)

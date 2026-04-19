@@ -1,4 +1,4 @@
-const chroma = require('../config/chroma')
+const { chroma } = require('../config/chroma')
 const logger = require('../utils/logger')
 
 function collectionName(userId) {

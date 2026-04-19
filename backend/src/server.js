@@ -1,12 +1,16 @@
 require('dotenv').config()
 const app = require('./app')
 const { connectMongo } = require('./config/mongo')
+const { initChroma } = require('./config/chroma')
 const logger = require('./utils/logger')
 const env = require('./config/env')
 
 async function start() {
   await connectMongo()
   logger.info('MongoDB connected')
+
+  await initChroma()
+  logger.info('ChromaDB connected')
 
   const server = app.listen(env.PORT, () => {
     logger.info({ port: env.PORT }, 'Server started')
