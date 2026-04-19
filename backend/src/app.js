@@ -9,6 +9,7 @@ const logger = require('./utils/logger')
 const authRoutes = require('./routes/auth.routes')
 const documentsRoutes = require('./routes/documents.routes')
 const chatRoutes = require('./routes/chat.routes')
+const conversationsRoutes = require('./routes/conversations.routes')
 const { errorHandler } = require('./middleware/error.middleware')
 
 const app = express()
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }))
 app.use('/api/auth', authRoutes)
 app.use('/api/documents', documentsRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/conversations', conversationsRoutes)
 
 app.use(errorHandler)
 
