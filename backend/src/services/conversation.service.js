@@ -17,15 +17,15 @@ async function getConversation(userId, conversationId) {
 
 async function appendMessages(conversationId, userContent, assistantContent) {
   const now = new Date()
-  const conv = await Conversation.findById(conversationId)
-  if (!conv) return
 
-  const setTitle = conv.title === '' ? userContent.slice(0, 60) : conv.title
+  await Conversation.updateOne(
+    { _id: conversationId, title: '' },
+    { $set: { title: userContent.slice(0, 60) } }
+  )
 
   await Conversation.updateOne(
     { _id: conversationId },
     {
-      $set: { title: setTitle },
       $push: {
         messages: {
           $each: [
