@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## OBRIGATÓRIO — Leitura antes de qualquer atividade
+
+Antes de iniciar qualquer tarefa, análise, implementação ou resposta técnica, leia **todo o conteúdo** da pasta `agnostic-core/`. Ela é o repositório local de skills, agentes, workflows e padrões que devem guiar todas as decisões deste projeto.
+
+Estrutura a ler:
+
+- `agnostic-core/skills/` — padrões por domínio (security, frontend, backend, testing, devops, ai, etc.)
+- `agnostic-core/agents/` — padrões de agentes especializados
+- `agnostic-core/commands/workflows/` — workflows de brainstorm, criação, debug e deploy
+- `agnostic-core/docs/` — guias de integração e roteamento de agentes
+- `agnostic-core/templates/` — templates de CLAUDE.md por tipo de projeto
+- `agnostic-core/exemplos/` — referências de uso e prompts prontos
+
 ## Project Overview
 
 RAG (Retrieval Augmented Generation) platform for PDF documents. Users upload PDFs, the system indexes them into a vector database, and an interactive chat answers questions using only the extracted document content as context.
