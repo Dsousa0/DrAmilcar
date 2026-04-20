@@ -1,12 +1,37 @@
-const pdfParse = require('pdf-parse')
 const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters')
 
 const CHUNK_SIZE = 1000
 const CHUNK_OVERLAP = 200
 
+let _pdfjs = null
+async function getPdfjs() {
+  if (_pdfjs) return _pdfjs
+  const mod = await import('pdfjs-dist/legacy/build/pdf.mjs')
+  mod.GlobalWorkerOptions.workerSrc = ''
+  _pdfjs = mod
+  return _pdfjs
+}
+
 async function extractText(buffer) {
-  const data = await pdfParse(buffer)
-  return data.text
+  const { getDocument } = await getPdfjs()
+  const loadingTask = getDocument({
+    data: new Uint8Array(buffer),
+    useWorkerFetch: false,
+    isEvalSupported: false,
+    useSystemFonts: true,
+    stopAtErrors: false,
+  })
+
+  const pdf = await loadingTask.promise
+  let text = ''
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i)
+    const content = await page.getTextContent()
+    text += content.items.map((item) => item.str).join(' ') + '\n'
+  }
+
+  return text
 }
 
 async function splitIntoChunks(text) {
