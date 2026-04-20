@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
 
-export function useChat() {
-  const [messages, setMessages] = useState([])
+export function useChat({ conversationId, appendOptimistic, appendTokenToLast, ensureActiveConversation, refreshList }) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState('')
 
@@ -9,10 +8,11 @@ export function useChat() {
     if (isStreaming) return
 
     setError('')
-    setMessages((prev) => [...prev, { role: 'user', content: question }])
-    setIsStreaming(true)
+    const activeConvId = await ensureActiveConversation()
 
-    setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
+    appendOptimistic('user', question)
+    appendOptimistic('assistant', '')
+    setIsStreaming(true)
 
     try {
       const token = localStorage.getItem('token')
@@ -22,7 +22,7 @@ export function useChat() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, conversationId: activeConvId }),
       })
 
       if (!res.ok) {
@@ -49,30 +49,25 @@ export function useChat() {
           try {
             parsed = JSON.parse(payload)
           } catch {
-            continue // malformed line — skip
+            continue
           }
 
           if (parsed.error) throw new Error(parsed.error)
 
           if (parsed.token) {
-            setMessages((prev) => {
-              const updated = [...prev]
-              updated[updated.length - 1] = {
-                ...updated[updated.length - 1],
-                content: updated[updated.length - 1].content + parsed.token,
-              }
-              return updated
-            })
+            appendTokenToLast(parsed.token)
           }
         }
       }
+
+      await refreshList()
     } catch (err) {
       setError(err.message || 'Falha ao conectar com o servidor.')
-      setMessages((prev) => prev.slice(0, -1))
+      appendOptimistic('__remove_last__', '')
     } finally {
       setIsStreaming(false)
     }
-  }, [isStreaming])
+  }, [isStreaming, conversationId, appendOptimistic, appendTokenToLast, ensureActiveConversation, refreshList])
 
-  return { messages, isStreaming, error, sendMessage }
+  return { isStreaming, error, sendMessage }
 }

@@ -3,8 +3,21 @@ import MessageBubble from './MessageBubble.jsx'
 import ChatInput from './ChatInput.jsx'
 import { useChat } from '../../hooks/useChat.js'
 
-export default function ChatWindow() {
-  const { messages, isStreaming, error, sendMessage } = useChat()
+export default function ChatWindow({
+  messages,
+  conversationId,
+  appendOptimistic,
+  appendTokenToLast,
+  ensureActiveConversation,
+  refreshList,
+}) {
+  const { isStreaming, error, sendMessage } = useChat({
+    conversationId,
+    appendOptimistic,
+    appendTokenToLast,
+    ensureActiveConversation,
+    refreshList,
+  })
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -13,7 +26,6 @@ export default function ChatWindow() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 pt-4 bg-gray-50">
         {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
@@ -31,7 +43,6 @@ export default function ChatWindow() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <ChatInput onSend={sendMessage} disabled={isStreaming} />
     </div>
   )

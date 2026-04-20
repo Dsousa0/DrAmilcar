@@ -23,4 +23,19 @@ api.interceptors.response.use(
   }
 )
 
+export async function getConversations() {
+  const { data } = await api.get('/conversations')
+  return data.data
+}
+
+export async function createConversation() {
+  const { data } = await api.post('/conversations')
+  return data
+}
+
+export async function getConversation(id) {
+  const { data } = await api.get(`/conversations/${id}`)
+  return data
+}
+
 export default api
