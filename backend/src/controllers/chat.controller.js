@@ -40,7 +40,7 @@ async function streamChat(req, res) {
       res.write(`data: ${JSON.stringify({ token: fallback })}\n\n`)
       res.write('data: [DONE]\n\n')
       if (conversationId) {
-        await appendMessages(conversationId, userId, question, fallback).catch(() => {})
+        await appendMessages(conversationId, userId, question, fallback).catch((err) => { logger.error({ err }, 'Failed to persist conversation messages') })
       }
       return res.end()
     }

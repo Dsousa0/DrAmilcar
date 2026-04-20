@@ -43,7 +43,7 @@ async function streamAnswer({ chunks, question, onToken, onDone }) {
     if (token) onToken(token)
   }
 
-  onDone()
+  await onDone()
   logger.debug({ model: env.LLM_MODEL }, 'Stream completed')
 }
 
