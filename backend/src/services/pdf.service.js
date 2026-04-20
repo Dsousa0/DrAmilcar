@@ -1,20 +1,13 @@
+const pdfjs = require('pdfjs-dist/legacy/build/pdf.js')
 const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters')
+
+pdfjs.GlobalWorkerOptions.workerSrc = ''
 
 const CHUNK_SIZE = 1000
 const CHUNK_OVERLAP = 200
 
-let _pdfjs = null
-async function getPdfjs() {
-  if (_pdfjs) return _pdfjs
-  const mod = await import('pdfjs-dist/legacy/build/pdf.mjs')
-  mod.GlobalWorkerOptions.workerSrc = ''
-  _pdfjs = mod
-  return _pdfjs
-}
-
 async function extractText(buffer) {
-  const { getDocument } = await getPdfjs()
-  const loadingTask = getDocument({
+  const loadingTask = pdfjs.getDocument({
     data: new Uint8Array(buffer),
     useWorkerFetch: false,
     isEvalSupported: false,
