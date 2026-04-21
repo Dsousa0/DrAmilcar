@@ -53,14 +53,14 @@ export default function ConversationList({ conversations, activeId, onSelect, on
                 <button
                   onClick={() => onSelect(conv._id)}
                   style={{
-                    width: '100%',
+                    border: 'none',
+                    borderLeft: isActive ? '2.5px solid #d6a96a' : '2.5px solid transparent',
                     textAlign: 'left',
                     padding: isActive ? '8px 10px 8px 8px' : '8px 10px',
                     fontSize: '11px',
                     fontWeight: isActive ? 500 : 400,
                     color: isActive ? '#292524' : '#78716c',
                     background: isActive ? '#f0ede8' : 'none',
-                    borderLeft: isActive ? '2.5px solid #d6a96a' : '2.5px solid transparent',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
@@ -71,7 +71,6 @@ export default function ConversationList({ conversations, activeId, onSelect, on
                     width: 'calc(100% - 16px)',
                     transition: 'all 120ms',
                     fontFamily: 'inherit',
-                    border: 'none',
                   }}
                   onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = '#f5f3ef' }}
                   onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'none' }}
