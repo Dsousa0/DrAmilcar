@@ -1,9 +1,14 @@
 export default function ProgressBar({ progress }) {
   return (
-    <div className="w-full bg-gray-200 rounded-full h-2">
+    <div style={{ width: '100%', background: '#e8e5e0', borderRadius: '9999px', height: '6px' }}>
       <div
-        className="bg-blue-500 h-2 rounded-full transition-all duration-200"
-        style={{ width: `${progress}%` }}
+        style={{
+          width: `${progress}%`,
+          height: '6px',
+          borderRadius: '9999px',
+          background: '#d6a96a',
+          transition: 'width 200ms',
+        }}
       />
     </div>
   )
