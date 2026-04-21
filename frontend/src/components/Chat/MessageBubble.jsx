@@ -73,15 +73,16 @@ export default function MessageBubble({ role, content }) {
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-              code({ inline, children, ...props }) {
-                return inline ? (
+              code({ node, children, className, ...props }) {
+                const isBlock = /language-/.test(className || '')
+                return isBlock ? (
+                  <pre style={{ background: '#1c1917', color: '#fafaf9', borderRadius: '8px', padding: '12px', overflowX: 'auto', fontSize: '12px', margin: '8px 0' }}>
+                    <code className={className} {...props}>{children}</code>
+                  </pre>
+                ) : (
                   <code style={{ background: '#e8e5e0', color: '#44403c', borderRadius: '4px', padding: '1px 5px', fontSize: '12px' }} {...props}>
                     {children}
                   </code>
-                ) : (
-                  <pre style={{ background: '#1c1917', color: '#fafaf9', borderRadius: '8px', padding: '12px', overflowX: 'auto', fontSize: '12px', margin: '8px 0' }}>
-                    <code {...props}>{children}</code>
-                  </pre>
                 )
               },
               p({ children }) {
