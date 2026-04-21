@@ -7,6 +7,7 @@ const env = require('./config/env')
 const logger = require('./utils/logger')
 
 const authRoutes = require('./routes/auth.routes')
+const adminRoutes = require('./routes/admin.routes')
 const documentsRoutes = require('./routes/documents.routes')
 const chatRoutes = require('./routes/chat.routes')
 const conversationsRoutes = require('./routes/conversations.routes')
@@ -29,6 +30,7 @@ app.use('/api/', rateLimit({
 app.get('/health', (req, res) => res.json({ status: 'ok' }))
 
 app.use('/api/auth', authRoutes)
+app.use('/api/admin', adminRoutes)
 app.use('/api/documents', documentsRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/conversations', conversationsRoutes)
