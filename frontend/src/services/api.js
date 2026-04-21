@@ -38,4 +38,23 @@ export async function getConversation(id) {
   return data
 }
 
+export async function getUsers() {
+  const { data } = await api.get('/admin/users')
+  return data.data
+}
+
+export async function createUser(userData) {
+  const { data } = await api.post('/admin/users', userData)
+  return data
+}
+
+export async function updateUser(id, userData) {
+  const { data } = await api.patch(`/admin/users/${id}`, userData)
+  return data
+}
+
+export async function deleteUser(id) {
+  await api.delete(`/admin/users/${id}`)
+}
+
 export default api
