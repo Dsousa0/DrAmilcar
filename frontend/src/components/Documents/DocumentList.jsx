@@ -31,10 +31,9 @@ export default function DocumentList({ documents, loading, onRemove }) {
           <button
             onClick={() => onRemove(doc._id)}
             title="Remover"
-            style={{ fontSize: '16px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, flexShrink: 0, opacity: 0, transition: 'opacity 150ms, color 150ms' }}
-            className="group-hover:opacity-100"
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#c25b4a')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#a8a29e')}
+            style={{ fontSize: '16px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, flexShrink: 0, opacity: 0.35, transition: 'opacity 150ms, color 150ms' }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#c25b4a' }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.35'; e.currentTarget.style.color = '#a8a29e' }}
           >
             ×
           </button>
