@@ -6,7 +6,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "jest --runInBand",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "seed:admin": "node scripts/seed-admin.js"
   },
   "dependencies": {
     "@langchain/openai": "^0.3.0",
