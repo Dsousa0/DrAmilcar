@@ -17,24 +17,72 @@ export default function ChatInput({ onSend, disabled }) {
     }
   }
 
+  const canSend = !disabled && value.trim().length > 0
+
   return (
-    <form onSubmit={handleSubmit} className="flex items-end gap-2 p-4 border-t border-gray-200 bg-white">
-      <textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Faça uma pergunta sobre os seus documentos..."
-        disabled={disabled}
-        rows={2}
-        className="flex-1 resize-none border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-      />
-      <button
-        type="submit"
-        disabled={disabled || !value.trim()}
-        className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors whitespace-nowrap"
+    <form
+      onSubmit={handleSubmit}
+      style={{ padding: '14px 20px 18px', borderTop: '1px solid #e8e5e0', background: '#fffffe' }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: '10px',
+          background: '#f5f4f1',
+          border: '1.5px solid #e8e5e0',
+          borderRadius: '12px',
+          padding: '10px 12px',
+          transition: 'border-color 200ms',
+        }}
+        onFocusCapture={(e) => (e.currentTarget.style.borderColor = '#d6a96a')}
+        onBlurCapture={(e) => (e.currentTarget.style.borderColor = '#e8e5e0')}
       >
-        {disabled ? '...' : 'Enviar'}
-      </button>
+        <textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Faça uma pergunta sobre os documentos…"
+          disabled={disabled}
+          rows={2}
+          style={{
+            flex: 1,
+            resize: 'none',
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            fontSize: '13px',
+            color: '#44403c',
+            fontFamily: 'inherit',
+            lineHeight: 1.55,
+            opacity: disabled ? 0.5 : 1,
+          }}
+        />
+        <button
+          type="submit"
+          disabled={!canSend}
+          style={{
+            width: '32px',
+            height: '32px',
+            background: canSend ? '#d6a96a' : '#e8e5e0',
+            border: 'none',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: canSend ? 'pointer' : 'not-allowed',
+            flexShrink: 0,
+            fontSize: '15px',
+            color: canSend ? '#fff' : '#a8a29e',
+            fontWeight: 700,
+            transition: 'background 150ms, color 150ms',
+          }}
+          onMouseEnter={(e) => { if (canSend) e.currentTarget.style.background = '#c4954f' }}
+          onMouseLeave={(e) => { if (canSend) e.currentTarget.style.background = '#d6a96a' }}
+        >
+          ↑
+        </button>
+      </div>
     </form>
   )
 }
