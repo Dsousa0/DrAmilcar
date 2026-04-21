@@ -1,6 +1,7 @@
-// frontend/src/App.jsx
+import { useState } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import Login from './pages/Login.jsx'
+import AdminUsers from './pages/AdminUsers.jsx'
 import { useDocuments } from './hooks/useDocuments.js'
 import { useConversations } from './hooks/useConversations.js'
 import UploadZone from './components/Upload/UploadZone.jsx'
@@ -9,7 +10,8 @@ import ConversationList from './components/Conversations/ConversationList.jsx'
 import ChatWindow from './components/Chat/ChatWindow.jsx'
 
 function MainLayout() {
-  const { user, logout } = useAuth()
+  const { user, isAdmin, logout } = useAuth()
+  const [adminView, setAdminView] = useState(false)
   const { documents, loading: docsLoading, uploading, uploadProgress, error: docsError, upload, remove } = useDocuments()
   const {
     conversations,
@@ -22,6 +24,10 @@ function MainLayout() {
     appendTokenToLast,
     refreshList,
   } = useConversations()
+
+  if (adminView) {
+    return <AdminUsers onBack={() => setAdminView(false)} />
+  }
 
   const activeConv = conversations.find((c) => c._id === activeId)
   const activeTitle = activeConv?.title || 'Nova conversa'
@@ -70,12 +76,24 @@ function MainLayout() {
 
         {/* Footer */}
         <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: '1px solid #e8e5e0' }}>
-          <p style={{ fontSize: '10px', color: '#a8a29e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>
-            {user?.email}
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
+            <p style={{ fontSize: '10px', color: '#a8a29e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>
+              {user?.email}
+            </p>
+            {isAdmin && (
+              <button
+                onClick={() => setAdminView(true)}
+                style={{ fontSize: '10px', color: '#d6a96a', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', padding: '0', fontWeight: 600 }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#c4954f')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#d6a96a')}
+              >
+                Usuários
+              </button>
+            )}
+          </div>
           <button
             onClick={logout}
-            style={{ fontSize: '10px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer' }}
+            style={{ fontSize: '10px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
             onMouseEnter={(e) => (e.target.style.color = '#c25b4a')}
             onMouseLeave={(e) => (e.target.style.color = '#a8a29e')}
           >
