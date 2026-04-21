@@ -2,10 +2,12 @@ const request = require('supertest')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
-// Prevent chroma.js from crashing in test environment
 jest.mock('../../src/config/chroma', () => ({}))
+jest.mock('../../src/services/embedding.service', () => ({ embedTexts: jest.fn().mockResolvedValue([]) }))
 
 const app = require('../../src/app')
+const User = require('../../src/models/User.model')
+const { hashPassword } = require('../../src/services/auth.service')
 
 let mongoServer
 
@@ -27,61 +29,35 @@ afterEach(async () => {
   }
 })
 
-describe('POST /api/auth/register', () => {
-  it('creates a user and returns a JWT', async () => {
+describe('POST /api/auth/register (removed)', () => {
+  it('returns 404 — public register endpoint no longer exists', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({ email: 'user@example.com', password: 'password123' })
-
-    expect(res.status).toBe(201)
-    expect(res.body.token).toBeDefined()
-    expect(res.body.user.email).toBe('user@example.com')
-    expect(res.body.user.passwordHash).toBeUndefined()
-  })
-
-  it('returns 409 for a duplicate email', async () => {
-    await request(app)
-      .post('/api/auth/register')
-      .send({ email: 'dup@example.com', password: 'pass' })
-
-    const res = await request(app)
-      .post('/api/auth/register')
-      .send({ email: 'dup@example.com', password: 'other' })
-
-    expect(res.status).toBe(409)
-    expect(res.body.error.code).toBe('CONFLICT')
-  })
-
-  it('returns 400 when email is missing', async () => {
-    const res = await request(app)
-      .post('/api/auth/register')
-      .send({ password: 'password123' })
-
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(404)
   })
 })
 
 describe('POST /api/auth/login', () => {
   beforeEach(async () => {
-    await request(app)
-      .post('/api/auth/register')
-      .send({ email: 'login@example.com', password: 'correct_pass' })
+    const passwordHash = await hashPassword('correct_pass')
+    await User.create({ email: 'login@example.com', passwordHash, role: 'user' })
   })
 
-  it('returns a JWT for valid credentials', async () => {
+  it('returns a JWT with role for valid credentials', async () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'login@example.com', password: 'correct_pass' })
 
     expect(res.status).toBe(200)
     expect(res.body.token).toBeDefined()
+    expect(res.body.user.role).toBe('user')
   })
 
   it('returns 401 for wrong password', async () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'login@example.com', password: 'wrong_pass' })
-
     expect(res.status).toBe(401)
   })
 
@@ -89,7 +65,6 @@ describe('POST /api/auth/login', () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'ghost@example.com', password: 'pass' })
-
     expect(res.status).toBe(401)
   })
 })
