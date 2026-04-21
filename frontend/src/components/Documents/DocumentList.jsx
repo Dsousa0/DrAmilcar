@@ -6,27 +6,35 @@ function formatBytes(bytes) {
 
 export default function DocumentList({ documents, loading, onRemove }) {
   if (loading) {
-    return <p className="text-sm text-gray-400 px-4 py-2">Carregando...</p>
+    return <p style={{ fontSize: '11px', color: '#a8a29e', padding: '4px 16px 8px' }}>Carregando…</p>
   }
   if (documents.length === 0) {
-    return <p className="text-sm text-gray-400 px-4 py-2">Nenhum documento indexado.</p>
+    return <p style={{ fontSize: '11px', color: '#a8a29e', padding: '4px 16px 8px' }}>Nenhum documento indexado.</p>
   }
   return (
-    <ul className="px-4 space-y-1">
+    <ul style={{ padding: '0 10px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
       {documents.map((doc) => (
-        <li key={doc._id} className="flex items-center justify-between group py-1">
-          <div className="min-w-0">
-            <p className="text-sm text-gray-700 truncate" title={doc.originalName}>
+        <li
+          key={doc._id}
+          style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '7px 8px', borderRadius: '6px' }}
+          className="group"
+        >
+          <span style={{ color: '#d6a96a', fontSize: '10px', flexShrink: 0 }}>◆</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: '10.5px', color: '#44403c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={doc.originalName}>
               {doc.originalName}
             </p>
-            <p className="text-xs text-gray-400">
+            <p style={{ fontSize: '9.5px', color: '#a8a29e', marginTop: '1px' }}>
               {formatBytes(doc.sizeBytes)} · {doc.chunkCount} chunks
             </p>
           </div>
           <button
             onClick={() => onRemove(doc._id)}
-            className="ml-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-lg leading-none"
             title="Remover"
+            style={{ fontSize: '16px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, flexShrink: 0, opacity: 0, transition: 'opacity 150ms, color 150ms' }}
+            className="group-hover:opacity-100"
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#c25b4a')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#a8a29e')}
           >
             ×
           </button>
