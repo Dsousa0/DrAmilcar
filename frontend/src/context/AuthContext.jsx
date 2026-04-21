@@ -22,14 +22,6 @@ export function AuthProvider({ children }) {
     setUser(data.user)
   }, [])
 
-  const register = useCallback(async (email, password) => {
-    const { data } = await api.post('/auth/register', { email, password })
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('user', JSON.stringify(data.user))
-    setToken(data.token)
-    setUser(data.user)
-  }, [])
-
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -37,8 +29,10 @@ export function AuthProvider({ children }) {
     setUser(null)
   }, [])
 
+  const isAdmin = user?.role === 'admin'
+
   return (
-    <AuthContext.Provider value={{ token, user, login, register, logout }}>
+    <AuthContext.Provider value={{ token, user, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

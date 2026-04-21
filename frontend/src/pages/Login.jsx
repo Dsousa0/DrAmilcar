@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Login() {
-  const { login, register } = useAuth()
-  const [mode, setMode] = useState('login')
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -14,11 +13,7 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      if (mode === 'login') {
-        await login(email, password)
-      } else {
-        await register(email, password)
-      }
+      await login(email, password)
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Algo deu errado. Tente novamente.')
     } finally {
@@ -34,7 +29,7 @@ export default function Login() {
           DrAmilcar
         </h1>
         <p style={{ fontSize: '13px', color: '#78716c', marginBottom: '28px', fontWeight: 400 }}>
-          {mode === 'login' ? 'Entre na sua conta' : 'Crie sua conta'}
+          Entre na sua conta
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -80,19 +75,9 @@ export default function Login() {
             onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#1c1917' }}
             onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#292524' }}
           >
-            {loading ? 'Aguarde…' : mode === 'login' ? 'Entrar' : 'Criar conta'}
+            {loading ? 'Aguarde…' : 'Entrar'}
           </button>
         </form>
-
-        <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '12px', color: '#a8a29e' }}>
-          {mode === 'login' ? 'Não tem conta?' : 'Já tem conta?'}{' '}
-          <button
-            onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError('') }}
-            style={{ color: '#d6a96a', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '12px' }}
-          >
-            {mode === 'login' ? 'Cadastre-se' : 'Entrar'}
-          </button>
-        </p>
       </div>
     </div>
   )
