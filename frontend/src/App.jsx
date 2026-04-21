@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import { useAuth } from './context/AuthContext.jsx'
 import Login from './pages/Login.jsx'
 import { useDocuments } from './hooks/useDocuments.js'
@@ -22,14 +23,22 @@ function MainLayout() {
     refreshList,
   } = useConversations()
 
+  const activeConv = conversations.find((c) => c._id === activeId)
+  const activeTitle = activeConv?.title || 'Nova conversa'
+
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden" style={{ background: '#fffffe' }}>
       {/* Sidebar */}
-      <aside className="w-72 flex flex-col bg-white border-r border-gray-200 shrink-0">
+      <aside className="w-72 flex flex-col shrink-0" style={{ background: '#fafaf9', borderRight: '1px solid #e8e5e0' }}>
+
         {/* Header */}
-        <div className="px-4 py-4 border-b border-gray-200">
-          <h1 className="text-lg font-bold text-gray-800">DrAmilcar</h1>
-          <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+        <div className="px-4 py-4" style={{ borderBottom: '1px solid #e8e5e0' }}>
+          <h1 style={{ fontFamily: "'Lora', serif", fontSize: '18px', fontWeight: 700, color: '#1c1917', letterSpacing: '-0.3px' }}>
+            DrAmilcar
+          </h1>
+          <p style={{ fontSize: '10px', color: '#a8a29e', marginTop: '3px', fontWeight: 400 }}>
+            base de conhecimento
+          </p>
         </div>
 
         {/* Conversations */}
@@ -40,29 +49,37 @@ function MainLayout() {
           onNew={newConversation}
         />
 
-        <div className="border-t border-gray-100 mt-1" />
+        {/* Divider */}
+        <div style={{ height: '1px', background: '#e8e5e0', margin: '4px 0 0' }} />
 
         {/* Upload */}
         <UploadZone onUpload={upload} uploading={uploading} progress={uploadProgress} />
 
-        {/* Error */}
-        {docsError && <p className="text-xs text-red-500 px-4 -mt-2 mb-2">{docsError}</p>}
+        {/* Upload error */}
+        {docsError && (
+          <p style={{ fontSize: '11px', color: '#c25b4a', padding: '0 16px 8px' }}>{docsError}</p>
+        )}
 
         {/* Document list */}
         <div className="flex-1 overflow-y-auto">
-          <p className="text-xs font-medium text-gray-400 uppercase px-4 pt-2 pb-1 tracking-wide">
-            Documentos indexados
+          <p style={{ fontSize: '9.5px', fontWeight: 700, color: '#a8a29e', letterSpacing: '1.4px', textTransform: 'uppercase', padding: '10px 16px 6px' }}>
+            Documentos
           </p>
           <DocumentList documents={documents} loading={docsLoading} onRemove={remove} />
         </div>
 
-        {/* Logout */}
-        <div className="px-4 py-3 border-t border-gray-200">
+        {/* Footer */}
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: '1px solid #e8e5e0' }}>
+          <p style={{ fontSize: '10px', color: '#a8a29e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>
+            {user?.email}
+          </p>
           <button
             onClick={logout}
-            className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+            style={{ fontSize: '10px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer' }}
+            onMouseEnter={(e) => (e.target.style.color = '#c25b4a')}
+            onMouseLeave={(e) => (e.target.style.color = '#a8a29e')}
           >
-            Sair
+            sair
           </button>
         </div>
       </aside>
@@ -72,6 +89,8 @@ function MainLayout() {
         <ChatWindow
           messages={messages}
           conversationId={activeId}
+          activeTitle={activeTitle}
+          docCount={documents.length}
           appendOptimistic={appendOptimistic}
           appendTokenToLast={appendTokenToLast}
           ensureActiveConversation={ensureActiveConversation}
