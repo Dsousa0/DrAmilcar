@@ -30,10 +30,11 @@ describe('generateToken', () => {
 
 describe('verifyToken', () => {
   it('should return the original payload for a valid token', () => {
-    const token = authService.generateToken({ userId: 'abc123', email: 'a@b.com' })
+    const token = authService.generateToken({ userId: 'abc123', email: 'a@b.com', role: 'admin' })
     const payload = authService.verifyToken(token)
     expect(payload.userId).toBe('abc123')
     expect(payload.email).toBe('a@b.com')
+    expect(payload.role).toBe('admin')
   })
 
   it('should throw for a tampered token', () => {
