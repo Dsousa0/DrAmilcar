@@ -18,4 +18,13 @@ function authenticate(req, res, next) {
   }
 }
 
-module.exports = { authenticate }
+function requireAdmin(req, res, next) {
+  if (req.user?.role !== 'admin') {
+    return res.status(403).json({
+      error: { code: 'FORBIDDEN', message: 'Admin access required' },
+    })
+  }
+  next()
+}
+
+module.exports = { authenticate, requireAdmin }
