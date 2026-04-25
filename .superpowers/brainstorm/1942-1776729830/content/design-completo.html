@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DrAmilcar — Design Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f0ede8;
+    color: #1c1917;
+    padding: 32px 24px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c1917;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-size: 13px;
+    color: #78716c;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+
+  /* ─── SECTION LABELS ─── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #a8a29e;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* ─── APP MOCKUP ─── */
+  .app-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .app-shell {
+    background: #fffffe;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(28,25,23,0.10), 0 1px 4px rgba(28,25,23,0.06);
+    display: flex;
+    height: 480px;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 220px;
+    background: #fafaf9;
+    border-right: 1px solid #e8e5e0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sidebar-header {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid #e8e5e0;
+  }
+
+  .sidebar-logo {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1c1917;
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-tagline {
+    font-size: 10px;
+    color: #a8a29e;
+    margin-top: 3px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  .sidebar-section {
+    padding: 14px 10px 0;
+  }
+
+  .sidebar-section-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #a8a29e;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+
+  .conv-item {
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #78716c;
+    cursor: pointer;
+    transition: background 150ms;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+    margin-bottom: 1px;
+  }
+  .conv-item.active {
+    background: #f0ede8;
+    color: #292524;
+    border-left: 2.5px solid #d6a96a;
+    font-weight: 500;
+    padding-left: 8px;
+  }
+  .conv-item:not(.active):hover { background: #f5f3ef; }
+
+  .new-conv-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #78716c;
+    font-weight: 500;
+    padding: 7px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin: 6px 10px 0;
+    border: 1.5px dashed #d6c5ae;
+    transition: all 150ms;
+  }
+  .new-conv-btn:hover { border-color: #d6a96a; color: #44403c; background: #faf7f3; }
+  .new-conv-icon { font-size: 13px; color: #d6a96a; }
+
+  .sidebar-divider { height: 1px; background: #e8e5e0; margin: 14px 0 0; }
+
+  .docs-section {
+    padding: 14px 10px;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .upload-zone {
+    border: 1.5px dashed #d6c5ae;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 10px;
+    color: #a8a29e;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: all 150ms;
+  }
+  .upload-zone:hover { border-color: #d6a96a; color: #78716c; background: #faf7f3; }
+  .upload-icon { font-size: 16px; display: block; margin-bottom: 4px; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    color: #78716c;
+    font-weight: 400;
+  }
+  .doc-icon { font-size: 12px; color: #d6a96a; flex-shrink: 0; }
+  .doc-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .sidebar-footer {
+    padding: 10px 18px 14px;
+    border-top: 1px solid #e8e5e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-email { font-size: 10px; color: #a8a29e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+  .logout-btn { font-size: 10px; color: #a8a29e; cursor: pointer; }
+  .logout-btn:hover { color: #c25b4a; }
+
+  /* ─── CHAT ─── */
+  .chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fffffe;
+    min-width: 0;
+  }
+
+  .chat-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid #e8e5e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chat-title { font-size: 13px; font-weight: 600; color: #1c1917; letter-spacing: -0.2px; }
+  .chat-meta { font-size: 10px; color: #a8a29e; }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .msg-user {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .msg-user .bubble {
+    background: #292524;
+    color: #fafaf9;
+    border-radius: 16px 16px 3px 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    max-width: 72%;
+    font-weight: 400;
+  }
+
+  .msg-ai {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ai-avatar {
+    width: 26px;
+    height: 26px;
+    background: #f0ede8;
+    border: 1.5px solid #e8e5e0;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lora', serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #d6a96a;
+    margin-top: 1px;
+  }
+  .msg-ai .bubble {
+    background: #f5f4f1;
+    color: #44403c;
+    border-radius: 3px 16px 16px 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.65;
+    max-width: 76%;
+    font-weight: 400;
+  }
+
+  .thinking {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #c5bdb4;
+    animation: bounce 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+  }
+
+  .chat-input-wrap {
+    padding: 14px 20px 18px;
+    border-top: 1px solid #e8e5e0;
+  }
+  .chat-input-box {
+    display: flex;
+    align-items: center;
+    background: #f5f4f1;
+    border: 1.5px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    gap: 10px;
+    transition: border-color 200ms;
+  }
+  .chat-input-box:focus-within { border-color: #d6a96a; }
+  .chat-input-text { flex: 1; font-size: 12px; color: #a8a29e; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .send-btn {
+    width: 28px; height: 28px;
+    background: #d6a96a;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 150ms;
+  }
+  .send-btn:hover { background: #c4954f; }
+
+  /* ─── LOGIN ─── */
+  .login-preview {
+    background: #f5f4f1;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(28,25,23,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 480px;
+    padding: 32px;
+  }
+  .login-card {
+    background: #fffffe;
+    border-radius: 16px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 2px 16px rgba(28,25,23,0.08);
+  }
+  .login-logo {
+    font-family: 'Lora', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1c1917;
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+  }
+  .login-sub {
+    font-size: 13px;
+    color: #78716c;
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+  .login-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #44403c;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .login-input {
+    width: 100%;
+    background: #f5f4f1;
+    border: 1.5px solid #e8e5e0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #44403c;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-bottom: 16px;
+    transition: border-color 200ms;
+  }
+  .login-input:focus { outline: none; border-color: #d6a96a; }
+  .login-btn {
+    width: 100%;
+    background: #292524;
+    color: #fafaf9;
+    border: none;
+    border-radius: 8px;
+    padding: 11px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer;
+    transition: background 150ms;
+    margin-top: 4px;
+  }
+  .login-btn:hover { background: #1c1917; }
+  .login-switch {
+    text-align: center;
+    font-size: 12px;
+    color: #a8a29e;
+    margin-top: 18px;
+  }
+  .login-switch a { color: #d6a96a; font-weight: 600; cursor: pointer; text-decoration: none; }
+
+  /* ─── PALETTE STRIP ─── */
+  .palette {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch-color {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .swatch-name { font-size: 9px; color: #78716c; font-weight: 500; }
+  .swatch-hex { font-size: 9px; color: #a8a29e; font-family: monospace; }
+
+  /* ─── SELECTION OVERLAY ─── */
+  .approve-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    justify-content: center;
+  }
+  .approve-btn {
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 150ms;
+  }
+  .approve-btn.yes {
+    background: #292524;
+    color: #fafaf9;
+  }
+  .approve-btn.yes:hover { background: #1c1917; }
+  .approve-btn.no {
+    background: #f0ede8;
+    color: #78716c;
+    border: 1.5px solid #e8e5e0;
+  }
+  .approve-btn.no:hover { border-color: #d6a96a; color: #44403c; }
+</style>
+</head>
+<body>
+
+<p class="page-title">DrAmilcar — Design Final</p>
+<p class="page-sub">Paleta Neutro Premium · Lora (logo) + Plus Jakarta Sans (UI) · Acento âmbar #d6a96a</p>
+
+<!-- PALETTE -->
+<p class="section-label">Paleta</p>
+<div class="palette" style="margin-bottom:32px;">
+  <div class="swatch"><div class="swatch-color" style="background:#fffffe;"></div><div class="swatch-name">Branco</div><div class="swatch-hex">#fffffe</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#fafaf9;"></div><div class="swatch-name">Sidebar</div><div class="swatch-hex">#fafaf9</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#f5f4f1;"></div><div class="swatch-name">Input/AI</div><div class="swatch-hex">#f5f4f1</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#f0ede8;"></div><div class="swatch-name">Ativo</div><div class="swatch-hex">#f0ede8</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#e8e5e0;"></div><div class="swatch-name">Borda</div><div class="swatch-hex">#e8e5e0</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#d6a96a;"></div><div class="swatch-name">Âmbar</div><div class="swatch-hex">#d6a96a</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#a8a29e;"></div><div class="swatch-name">Muted</div><div class="swatch-hex">#a8a29e</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#78716c;"></div><div class="swatch-name">Secondary</div><div class="swatch-hex">#78716c</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#44403c;"></div><div class="swatch-name">Body</div><div class="swatch-hex">#44403c</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#292524;"></div><div class="swatch-name">Usuário</div><div class="swatch-hex">#292524</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#1c1917;"></div><div class="swatch-name">Primary</div><div class="swatch-hex">#1c1917</div></div>
+</div>
+
+<!-- APP + LOGIN -->
+<p class="section-label">Interface</p>
+<div class="app-wrap">
+
+  <!-- APP SHELL -->
+  <div class="app-shell">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">DrAmilcar</div>
+        <div class="sidebar-tagline">base de conhecimento</div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Conversas</div>
+        <div class="new-conv-btn">
+          <span class="new-conv-icon">＋</span> Nova conversa
+        </div>
+        <div style="margin-top:8px;">
+          <div class="conv-item active">Relatório cardiológico</div>
+          <div class="conv-item">Exames laboratoriais</div>
+          <div class="conv-item">Protocolo oncologia</div>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="docs-section">
+        <div class="sidebar-section-label">Documentos</div>
+        <div class="upload-zone">
+          <span class="upload-icon">📄</span>
+          Soltar PDF ou clicar
+        </div>
+        <div class="doc-item"><span class="doc-icon">◆</span><span class="doc-name">relatorio_cardio.pdf</span></div>
+        <div class="doc-item"><span class="doc-icon">◆</span><span class="doc-name">exames_lab_2024.pdf</span></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="user-email">medico@hospital.com</span>
+        <span class="logout-btn">sair</span>
+      </div>
+    </div>
+
+    <div class="chat-area">
+      <div class="chat-header">
+        <span class="chat-title">Relatório cardiológico</span>
+        <span class="chat-meta">2 documentos</span>
+      </div>
+
+      <div class="messages">
+        <div class="msg-user">
+          <div class="bubble">Quais são os critérios diagnósticos para fibrilação atrial?</div>
+        </div>
+
+        <div class="msg-ai">
+          <div class="ai-avatar">A</div>
+          <div class="bubble">Segundo o relatório, os critérios incluem ausência de ondas P regulares, intervalos RR irregulares e frequência atrial entre 350–600 bpm. O documento também menciona…</div>
+        </div>
+
+        <div class="msg-user">
+          <div class="bubble">E o tratamento de primeira linha?</div>
+        </div>
+
+        <div class="msg-ai">
+          <div class="ai-avatar">A</div>
+          <div class="bubble" style="display:flex;align-items:center;">
+            <div class="thinking">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <div class="chat-input-text">Faça uma pergunta sobre os documentos…</div>
+          <div class="send-btn">↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="login-preview">
+    <div class="login-card">
+      <div class="login-logo">DrAmilcar</div>
+      <div class="login-sub">Entre na sua conta</div>
+
+      <label class="login-label">Email</label>
+      <input class="login-input" type="email" placeholder="medico@hospital.com">
+
+      <label class="login-label">Senha</label>
+      <input class="login-input" type="password" placeholder="••••••••">
+
+      <button class="login-btn">Entrar</button>
+
+      <div class="login-switch">
+        Não tem conta? <a>Cadastre-se</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- APPROVE -->
+<p class="section-label" style="text-align:center;">Aprovação</p>
+<p style="text-align:center;font-size:13px;color:#78716c;margin-bottom:20px;">Este é o design que será implementado. Aprova ou quer ajustar algo?</p>
+<div class="approve-row">
+  <button class="approve-btn yes" onclick="window.__companion?.select('approve'); alert('Aprovado! Responda no terminal.')">✓ Aprovado — implementar</button>
+  <button class="approve-btn no" onclick="alert('Me diga no terminal o que ajustar.')">Quero ajustar algo</button>
+</div>
+
+</body>
+</html>
