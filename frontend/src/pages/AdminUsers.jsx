@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { getUsers, createUser, updateUser, deleteUser } from '../services/api'
 
 const ROLE_BADGE = {
@@ -211,8 +211,8 @@ export default function AdminUsers({ onBack }) {
               </thead>
               <tbody>
                 {users.map((u, i) => (
-                  <>
-                    <tr key={u._id} style={{ borderBottom: i < users.length - 1 ? '1px solid #f0ede8' : 'none', background: editId === u._id ? '#fafaf9' : 'transparent' }}>
+                  <React.Fragment key={u._id}>
+                    <tr style={{ borderBottom: i < users.length - 1 ? '1px solid #f0ede8' : 'none', background: editId === u._id ? '#fafaf9' : 'transparent' }}>
                       <td style={{ padding: '12px 16px', fontSize: '13px', color: '#44403c' }}>{u.email}</td>
                       <td style={{ padding: '12px 16px' }}>
                         <span style={{ fontSize: '10px', fontWeight: 600, borderRadius: '4px', padding: '2px 7px', ...ROLE_BADGE[u.role] }}>
@@ -241,7 +241,7 @@ export default function AdminUsers({ onBack }) {
                     </tr>
 
                     {editId === u._id && (
-                      <tr key={`edit-${u._id}`}>
+                      <tr>
                         <td colSpan={4} style={{ padding: '0 16px 16px' }}>
                           <form onSubmit={handleEdit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '12px' }}>
                             <input
@@ -285,7 +285,7 @@ export default function AdminUsers({ onBack }) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>

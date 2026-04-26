@@ -37,7 +37,7 @@ services:
       chromadb:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -63,11 +63,11 @@ services:
           memory: 512M
 
   chromadb:
-    image: chromadb/chroma:0.5.0
+    image: chromadb/chroma:0.6.3
     volumes:
       - chroma_data:/chroma/chroma
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8000/api/v1/heartbeat"]
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/heartbeat')"]
       interval: 10s
       timeout: 5s
       retries: 5
