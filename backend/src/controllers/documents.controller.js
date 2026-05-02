@@ -6,7 +6,7 @@ const logger = require('../utils/logger')
 
 async function listDocuments(req, res, next) {
   try {
-    const docs = await Document.find({ userId: req.user.userId }).sort({ createdAt: -1 })
+    const docs = await Document.find({}).sort({ createdAt: -1 })
     res.json({ data: docs })
   } catch (err) {
     next(err)
@@ -38,11 +38,10 @@ async function uploadDocument(req, res, next) {
       originalName: originalname,
       sizeBytes: size,
       chunkCount: chunks.length,
-      chromaCollection: `user_${userId}`,
+      chromaCollection: 'global_documents',
     })
 
     await vectorService.addChunks({
-      userId,
       documentId: doc._id.toString(),
       chunks,
       embeddings,
@@ -58,16 +57,15 @@ async function uploadDocument(req, res, next) {
 async function deleteDocument(req, res, next) {
   try {
     const { id } = req.params
-    const { userId } = req.user
 
-    const doc = await Document.findOne({ _id: id, userId })
+    const doc = await Document.findById(id)
     if (!doc) {
       return res.status(404).json({
         error: { code: 'NOT_FOUND', message: 'Document not found' },
       })
     }
 
-    await vectorService.deleteDocumentChunks({ userId, documentId: id })
+    await vectorService.deleteDocumentChunks({ documentId: id })
     await Document.deleteOne({ _id: id })
 
     res.status(204).send()
