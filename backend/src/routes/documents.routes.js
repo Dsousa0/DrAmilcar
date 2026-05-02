@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { authenticate } = require('../middleware/auth.middleware')
+const { authenticate, requireAdmin } = require('../middleware/auth.middleware')
 const { upload } = require('../middleware/upload.middleware')
 const {
   listDocuments,
@@ -10,7 +10,7 @@ const {
 const router = Router()
 router.use(authenticate)
 router.get('/', listDocuments)
-router.post('/upload', upload.single('file'), uploadDocument)
-router.delete('/:id', deleteDocument)
+router.post('/upload', requireAdmin, upload.single('file'), uploadDocument)
+router.delete('/:id', requireAdmin, deleteDocument)
 
 module.exports = router
