@@ -4,7 +4,7 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-export default function DocumentList({ documents, loading, onRemove }) {
+export default function DocumentList({ documents, loading, onRemove, canDelete }) {
   if (loading) {
     return <p style={{ fontSize: '11px', color: '#a8a29e', padding: '4px 16px 8px' }}>Carregando…</p>
   }
@@ -28,15 +28,17 @@ export default function DocumentList({ documents, loading, onRemove }) {
               {formatBytes(doc.sizeBytes)} · {doc.chunkCount} chunks
             </p>
           </div>
-          <button
-            onClick={() => onRemove(doc._id)}
-            title="Remover"
-            style={{ fontSize: '16px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, flexShrink: 0, opacity: 0.35, transition: 'opacity 150ms, color 150ms' }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#c25b4a' }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.35'; e.currentTarget.style.color = '#a8a29e' }}
-          >
-            ×
-          </button>
+          {canDelete && (
+            <button
+              onClick={() => onRemove(doc._id)}
+              title="Remover"
+              style={{ fontSize: '16px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, flexShrink: 0, opacity: 0.35, transition: 'opacity 150ms, color 150ms' }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#c25b4a' }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.35'; e.currentTarget.style.color = '#a8a29e' }}
+            >
+              ×
+            </button>
+          )}
         </li>
       ))}
     </ul>
