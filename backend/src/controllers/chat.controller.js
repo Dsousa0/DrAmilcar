@@ -15,7 +15,7 @@ async function streamChat(req, res) {
     })
   }
 
-  const docCount = await Document.countDocuments({ userId })
+  const docCount = await Document.countDocuments({})
   if (docCount === 0) {
     return res.status(422).json({
       error: {
@@ -33,7 +33,7 @@ async function streamChat(req, res) {
 
   try {
     const queryEmbedding = await embedQuery(question)
-    const chunks = await queryChunks({ userId, queryEmbedding, nResults: 5 })
+    const chunks = await queryChunks({ queryEmbedding, nResults: 5 })
 
     if (chunks.length === 0) {
       const fallback = 'Não encontrei informações relevantes nos seus documentos.'
