@@ -24,19 +24,29 @@ export default function UploadZone({ onUpload, uploading, progress }) {
         onDrop={handleDrop}
         onClick={() => !uploading && inputRef.current?.click()}
         style={{
-          border: `1.5px dashed ${dragging ? '#d6a96a' : '#d6c5ae'}`,
+          border: `1.5px dashed ${dragging ? '#f07820' : '#2a2620'}`,
           borderRadius: '8px',
-          padding: '10px',
+          padding: '14px 10px',
           textAlign: 'center',
           cursor: uploading ? 'not-allowed' : 'pointer',
-          opacity: uploading ? 0.6 : 1,
-          background: dragging ? '#faf7f3' : 'transparent',
+          opacity: uploading ? 0.5 : 1,
+          background: dragging ? 'rgba(240,120,32,0.06)' : 'transparent',
           transition: 'all 150ms',
         }}
-        onMouseEnter={(e) => { if (!uploading && !dragging) { e.currentTarget.style.borderColor = '#d6a96a'; e.currentTarget.style.background = '#faf7f3' } }}
-        onMouseLeave={(e) => { if (!dragging) { e.currentTarget.style.borderColor = '#d6c5ae'; e.currentTarget.style.background = 'transparent' } }}
+        onMouseEnter={(e) => {
+          if (!uploading && !dragging) {
+            e.currentTarget.style.borderColor = 'rgba(240,120,32,0.5)'
+            e.currentTarget.style.background = 'rgba(240,120,32,0.04)'
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!dragging) {
+            e.currentTarget.style.borderColor = '#2a2620'
+            e.currentTarget.style.background = 'transparent'
+          }
+        }}
       >
-        <p style={{ fontSize: '10px', color: '#a8a29e' }}>
+        <p style={{ fontSize: '10px', color: '#4a433d' }}>
           {uploading ? 'Enviando…' : 'Soltar PDF ou clicar'}
         </p>
         <input
@@ -49,9 +59,9 @@ export default function UploadZone({ onUpload, uploading, progress }) {
         />
       </div>
       {uploading && (
-        <div style={{ marginTop: '6px' }}>
+        <div style={{ marginTop: '8px' }}>
           <ProgressBar progress={progress} />
-          <p style={{ fontSize: '10px', color: '#a8a29e', marginTop: '3px', textAlign: 'right' }}>{progress}%</p>
+          <p style={{ fontSize: '10px', color: '#4a433d', marginTop: '3px', textAlign: 'right' }}>{progress}%</p>
         </div>
       )}
     </div>

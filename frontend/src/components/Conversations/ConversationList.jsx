@@ -1,9 +1,17 @@
-// frontend/src/components/Conversations/ConversationList.jsx
 export default function ConversationList({ conversations, activeId, onSelect, onNew }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" style={{ flex: 1, minHeight: 0 }}>
       {/* Section label */}
-      <p style={{ fontSize: '9.5px', fontWeight: 700, color: '#a8a29e', letterSpacing: '1.4px', textTransform: 'uppercase', padding: '14px 16px 6px' }}>
+      <p
+        style={{
+          fontSize: '9px',
+          fontWeight: 700,
+          color: '#3a3530',
+          letterSpacing: '1.6px',
+          textTransform: 'uppercase',
+          padding: '14px 16px 6px',
+        }}
+      >
         Conversas
       </p>
 
@@ -18,9 +26,9 @@ export default function ConversationList({ conversations, activeId, onSelect, on
             gap: '6px',
             fontSize: '11px',
             fontWeight: 500,
-            color: '#78716c',
+            color: '#6b6058',
             background: 'none',
-            border: '1.5px dashed #d6c5ae',
+            border: '1.5px dashed #2a2620',
             borderRadius: '7px',
             padding: '7px 10px',
             cursor: 'pointer',
@@ -28,24 +36,24 @@ export default function ConversationList({ conversations, activeId, onSelect, on
             fontFamily: 'inherit',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = '#d6a96a'
-            e.currentTarget.style.color = '#44403c'
-            e.currentTarget.style.background = '#faf7f3'
+            e.currentTarget.style.borderColor = 'rgba(240,120,32,0.4)'
+            e.currentTarget.style.color = '#b0a899'
+            e.currentTarget.style.background = 'rgba(240,120,32,0.04)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = '#d6c5ae'
-            e.currentTarget.style.color = '#78716c'
+            e.currentTarget.style.borderColor = '#2a2620'
+            e.currentTarget.style.color = '#6b6058'
             e.currentTarget.style.background = 'none'
           }}
         >
-          <span style={{ color: '#d6a96a', fontSize: '14px', lineHeight: 1 }}>＋</span>
+          <span style={{ color: '#f07820', fontSize: '14px', lineHeight: 1 }}>＋</span>
           Nova conversa
         </button>
       </div>
 
       {/* List */}
       {conversations.length > 0 && (
-        <ul className="overflow-y-auto" style={{ maxHeight: '180px' }}>
+        <ul className="overflow-y-auto" style={{ maxHeight: '200px' }}>
           {conversations.map((conv) => {
             const isActive = conv._id === activeId
             return (
@@ -54,13 +62,13 @@ export default function ConversationList({ conversations, activeId, onSelect, on
                   onClick={() => onSelect(conv._id)}
                   style={{
                     border: 'none',
-                    borderLeft: isActive ? '2.5px solid #d6a96a' : '2.5px solid transparent',
+                    borderLeft: isActive ? '2px solid #f07820' : '2px solid transparent',
                     textAlign: 'left',
-                    padding: isActive ? '8px 10px 8px 8px' : '8px 10px',
+                    padding: isActive ? '7px 10px 7px 9px' : '7px 10px',
                     fontSize: '11px',
                     fontWeight: isActive ? 500 : 400,
-                    color: isActive ? '#292524' : '#78716c',
-                    background: isActive ? '#f0ede8' : 'none',
+                    color: isActive ? '#ede8df' : '#6b6058',
+                    background: isActive ? 'rgba(240,120,32,0.08)' : 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
@@ -72,8 +80,18 @@ export default function ConversationList({ conversations, activeId, onSelect, on
                     transition: 'all 120ms',
                     fontFamily: 'inherit',
                   }}
-                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = '#f5f3ef' }}
-                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'none' }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
+                      e.currentTarget.style.color = '#b0a899'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'none'
+                      e.currentTarget.style.color = '#6b6058'
+                    }
+                  }}
                 >
                   {conv.title || 'Nova conversa'}
                 </button>

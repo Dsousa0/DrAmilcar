@@ -22,19 +22,69 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f4f1' }}>
-      <div style={{ background: '#fffffe', borderRadius: '16px', padding: '36px 32px', width: '100%', maxWidth: '380px', boxShadow: '0 2px 16px rgba(28,25,23,0.08)' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0d0c0a',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Ambient glow */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '30%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(240,120,32,0.07) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
-        <h1 style={{ fontFamily: "'Lora', serif", fontSize: '24px', fontWeight: 700, color: '#1c1917', letterSpacing: '-0.4px', marginBottom: '4px' }}>
-          DrAmilcar
-        </h1>
-        <p style={{ fontSize: '13px', color: '#78716c', marginBottom: '28px', fontWeight: 400 }}>
-          Entre na sua conta
-        </p>
+      <div
+        style={{
+          background: '#131110',
+          border: '1px solid #242018',
+          borderRadius: '16px',
+          padding: '40px 36px',
+          width: '100%',
+          maxWidth: '380px',
+          position: 'relative',
+          zIndex: 1,
+          boxShadow: '0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(240,120,32,0.04)',
+        }}
+      >
+        {/* Logo mark */}
+        <div style={{ marginBottom: '28px' }}>
+          <h1
+            style={{
+              fontFamily: "'Lora', serif",
+              fontSize: '26px',
+              fontWeight: 700,
+              letterSpacing: '-0.4px',
+              margin: 0,
+              lineHeight: 1,
+            }}
+          >
+            Dr. <span style={{ color: '#f07820' }}>Theo</span>
+          </h1>
+          <p style={{ fontSize: '12.5px', color: '#6b6058', marginTop: '6px', fontWeight: 400 }}>
+            Entre na sua conta
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label htmlFor="email" style={{ display: 'block', fontSize: '11.5px', fontWeight: 600, color: '#44403c', marginBottom: '5px' }}>
+            <label
+              htmlFor="email"
+              style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#b0a899', marginBottom: '6px', letterSpacing: '0.04em', textTransform: 'uppercase' }}
+            >
               Email
             </label>
             <input
@@ -43,14 +93,36 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ width: '100%', background: '#f5f4f1', border: '1.5px solid #e8e5e0', borderRadius: '8px', padding: '10px 12px', fontSize: '13px', color: '#44403c', fontFamily: 'inherit', outline: 'none', transition: 'border-color 200ms', boxSizing: 'border-box' }}
-              onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-              onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+              style={{
+                width: '100%',
+                background: '#0d0c0a',
+                border: '1.5px solid #242018',
+                borderRadius: '8px',
+                padding: '11px 13px',
+                fontSize: '13px',
+                color: '#ede8df',
+                fontFamily: 'inherit',
+                outline: 'none',
+                transition: 'border-color 200ms, box-shadow 200ms',
+                boxSizing: 'border-box',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#f07820'
+                e.target.style.boxShadow = '0 0 0 3px rgba(240,120,32,0.12)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#242018'
+                e.target.style.boxShadow = 'none'
+              }}
+              placeholder="seu@email.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" style={{ display: 'block', fontSize: '11.5px', fontWeight: 600, color: '#44403c', marginBottom: '5px' }}>
+            <label
+              htmlFor="password"
+              style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#b0a899', marginBottom: '6px', letterSpacing: '0.04em', textTransform: 'uppercase' }}
+            >
               Senha
             </label>
             <input
@@ -60,20 +132,59 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              style={{ width: '100%', background: '#f5f4f1', border: '1.5px solid #e8e5e0', borderRadius: '8px', padding: '10px 12px', fontSize: '13px', color: '#44403c', fontFamily: 'inherit', outline: 'none', transition: 'border-color 200ms', boxSizing: 'border-box' }}
-              onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-              onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+              style={{
+                width: '100%',
+                background: '#0d0c0a',
+                border: '1.5px solid #242018',
+                borderRadius: '8px',
+                padding: '11px 13px',
+                fontSize: '13px',
+                color: '#ede8df',
+                fontFamily: 'inherit',
+                outline: 'none',
+                transition: 'border-color 200ms, box-shadow 200ms',
+                boxSizing: 'border-box',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#f07820'
+                e.target.style.boxShadow = '0 0 0 3px rgba(240,120,32,0.12)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#242018'
+                e.target.style.boxShadow = 'none'
+              }}
+              placeholder="••••••••"
             />
           </div>
 
-          {error && <p style={{ fontSize: '12px', color: '#c25b4a' }}>{error}</p>}
+          {error && (
+            <p style={{ fontSize: '12px', color: '#e05040', margin: 0, padding: '8px 12px', background: 'rgba(224,80,64,0.08)', borderRadius: '6px', border: '1px solid rgba(224,80,64,0.2)' }}>
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            style={{ width: '100%', background: loading ? '#44403c' : '#292524', color: '#fafaf9', border: 'none', borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 600, fontFamily: 'inherit', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 150ms', marginTop: '4px' }}
-            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#1c1917' }}
-            onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#292524' }}
+            style={{
+              width: '100%',
+              background: loading ? '#2a2420' : '#f07820',
+              color: loading ? '#6b6058' : '#0d0c0a',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '12px',
+              fontSize: '13px',
+              fontWeight: 700,
+              fontFamily: 'inherit',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              transition: 'background 150ms, transform 80ms',
+              marginTop: '4px',
+              letterSpacing: '0.02em',
+            }}
+            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#e06810' }}
+            onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#f07820' }}
+            onMouseDown={(e) => { if (!loading) e.currentTarget.style.transform = 'scale(0.98)' }}
+            onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
           >
             {loading ? 'Aguarde…' : 'Entrar'}
           </button>

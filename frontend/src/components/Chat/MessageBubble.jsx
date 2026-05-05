@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm'
 
 function ThinkingDots() {
   return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 0' }}>
+    <span style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '2px 0' }}>
       {[0, 1, 2].map((i) => (
         <span
           key={i}
@@ -11,17 +11,18 @@ function ThinkingDots() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            background: '#c5bdb4',
+            background: '#f07820',
             display: 'inline-block',
             animation: 'bounce 1.2s infinite',
             animationDelay: `${i * 0.2}s`,
+            opacity: 0.7,
           }}
         />
       ))}
       <style>{`
         @keyframes bounce {
-          0%, 80%, 100% { transform: translateY(0); }
-          40% { transform: translateY(-5px); }
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.7; }
+          40% { transform: translateY(-5px); opacity: 1; }
         }
       `}</style>
     </span>
@@ -33,24 +34,34 @@ export default function MessageBubble({ role, content }) {
   const isThinking = !isUser && content === ''
 
   return (
-    <div style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start', alignItems: 'flex-start', gap: '8px', marginBottom: '14px' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: isUser ? 'flex-end' : 'flex-start',
+        alignItems: 'flex-start',
+        gap: '10px',
+        marginBottom: '16px',
+      }}
+    >
       {!isUser && (
-        <div style={{
-          width: '26px',
-          height: '26px',
-          background: '#f0ede8',
-          border: '1.5px solid #e8e5e0',
-          borderRadius: '50%',
-          flexShrink: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: "'Lora', serif",
-          fontSize: '10px',
-          fontWeight: 700,
-          color: '#d6a96a',
-          marginTop: '1px',
-        }}>
+        <div
+          style={{
+            width: '28px',
+            height: '28px',
+            background: 'rgba(240,120,32,0.10)',
+            border: '1.5px solid rgba(240,120,32,0.25)',
+            borderRadius: '50%',
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: "'Lora', serif",
+            fontSize: '11px',
+            fontWeight: 700,
+            color: '#f07820',
+            marginTop: '1px',
+          }}
+        >
           A
         </div>
       )}
@@ -59,10 +70,12 @@ export default function MessageBubble({ role, content }) {
           maxWidth: '76%',
           padding: '10px 14px',
           fontSize: '13px',
-          lineHeight: isUser ? 1.55 : 1.65,
-          borderRadius: isUser ? '16px 16px 3px 16px' : '3px 16px 16px 16px',
-          background: isUser ? '#292524' : '#f5f4f1',
-          color: isUser ? '#fafaf9' : '#44403c',
+          lineHeight: isUser ? 1.55 : 1.7,
+          borderRadius: isUser ? '16px 16px 4px 16px' : '4px 16px 16px 16px',
+          background: isUser ? '#f07820' : '#1a1815',
+          color: isUser ? '#0d0c0a' : '#c8c0b4',
+          border: isUser ? 'none' : '1px solid #242018',
+          fontWeight: isUser ? 500 : 400,
         }}
       >
         {isUser ? (
@@ -76,17 +89,41 @@ export default function MessageBubble({ role, content }) {
               code({ node, children, className, ...props }) {
                 const isBlock = /language-/.test(className || '')
                 return isBlock ? (
-                  <pre style={{ background: '#1c1917', color: '#fafaf9', borderRadius: '8px', padding: '12px', overflowX: 'auto', fontSize: '12px', margin: '8px 0' }}>
+                  <pre
+                    style={{
+                      background: '#0d0c0a',
+                      color: '#ede8df',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      overflowX: 'auto',
+                      fontSize: '12px',
+                      margin: '8px 0',
+                      border: '1px solid #242018',
+                    }}
+                  >
                     <code className={className} {...props}>{children}</code>
                   </pre>
                 ) : (
-                  <code style={{ background: '#e8e5e0', color: '#44403c', borderRadius: '4px', padding: '1px 5px', fontSize: '12px' }} {...props}>
+                  <code
+                    style={{
+                      background: '#0d0c0a',
+                      color: '#f07820',
+                      borderRadius: '4px',
+                      padding: '1px 6px',
+                      fontSize: '12px',
+                      border: '1px solid #242018',
+                    }}
+                    {...props}
+                  >
                     {children}
                   </code>
                 )
               },
               p({ children }) {
                 return <p style={{ margin: '0 0 8px' }}>{children}</p>
+              },
+              strong({ children }) {
+                return <strong style={{ color: '#ede8df', fontWeight: 600 }}>{children}</strong>
               },
             }}
           >

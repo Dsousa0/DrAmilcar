@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Sora:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,8 +6,28 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #fffffe;
-    color: #1c1917;
+    font-family: 'Sora', sans-serif;
+    background-color: #0d0c0a;
+    color: #ede8df;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2e2a24;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #f07820;
+  }
+
+  ::selection {
+    background: rgba(240, 120, 32, 0.3);
+    color: #ede8df;
   }
 }

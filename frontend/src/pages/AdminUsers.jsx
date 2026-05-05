@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { getUsers, createUser, updateUser, deleteUser } from '../services/api'
 
 const ROLE_BADGE = {
-  admin: { background: '#fef3e2', color: '#d6a96a', border: '1px solid #f0d9a8' },
-  user: { background: '#f5f4f1', color: '#78716c', border: '1px solid #e8e5e0' },
+  admin: { background: 'rgba(240,120,32,0.12)', color: '#f07820', border: '1px solid rgba(240,120,32,0.25)' },
+  user: { background: 'rgba(255,255,255,0.04)', color: '#6b6058', border: '1px solid #242018' },
 }
 
 function formatDate(iso) {
@@ -92,41 +92,82 @@ export default function AdminUsers({ onBack }) {
 
   const inputStyle = {
     width: '100%',
-    background: '#f5f4f1',
-    border: '1.5px solid #e8e5e0',
+    background: '#0d0c0a',
+    border: '1.5px solid #242018',
     borderRadius: '8px',
     padding: '9px 12px',
     fontSize: '13px',
-    color: '#44403c',
+    color: '#ede8df',
     fontFamily: 'inherit',
     outline: 'none',
     boxSizing: 'border-box',
+    transition: 'border-color 200ms, box-shadow 200ms',
   }
 
-  const selectStyle = { ...inputStyle }
+  function inputFocus(e) {
+    e.target.style.borderColor = '#f07820'
+    e.target.style.boxShadow = '0 0 0 3px rgba(240,120,32,0.10)'
+  }
+  function inputBlur(e) {
+    e.target.style.borderColor = '#242018'
+    e.target.style.boxShadow = 'none'
+  }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f4f1', padding: '32px 24px' }}>
+    <div style={{ minHeight: '100vh', background: '#0d0c0a', padding: '32px 24px' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
           <button
             onClick={onBack}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#78716c', fontSize: '13px', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px', padding: '0' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#1c1917')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#78716c')}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#4a433d',
+              fontSize: '13px',
+              fontFamily: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '0',
+              transition: 'color 150ms',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#b0a899')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#4a433d')}
           >
             ← Voltar
           </button>
-          <h1 style={{ fontFamily: "'Lora', serif", fontSize: '22px', fontWeight: 700, color: '#1c1917', letterSpacing: '-0.3px', margin: 0 }}>
+          <h1
+            style={{
+              fontFamily: "'Lora', serif",
+              fontSize: '22px',
+              fontWeight: 700,
+              color: '#ede8df',
+              letterSpacing: '-0.3px',
+              margin: 0,
+            }}
+          >
             Gestão de Usuários
           </h1>
           <button
             onClick={() => { setShowCreate(true); setCreateError('') }}
-            style={{ marginLeft: 'auto', background: '#292524', color: '#fafaf9', border: 'none', borderRadius: '8px', padding: '9px 16px', fontSize: '12px', fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer' }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = '#1c1917')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = '#292524')}
+            style={{
+              marginLeft: 'auto',
+              background: '#f07820',
+              color: '#0d0c0a',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '9px 16px',
+              fontSize: '12px',
+              fontWeight: 700,
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              transition: 'background 150ms',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#e06810')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = '#f07820')}
           >
             + Novo usuário
           </button>
@@ -134,8 +175,25 @@ export default function AdminUsers({ onBack }) {
 
         {/* Create form */}
         {showCreate && (
-          <div style={{ background: '#fffffe', border: '1px solid #e8e5e0', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-            <p style={{ fontSize: '12px', fontWeight: 700, color: '#44403c', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <div
+            style={{
+              background: '#131110',
+              border: '1px solid #242018',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '16px',
+            }}
+          >
+            <p
+              style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                color: '#4a433d',
+                marginBottom: '14px',
+                textTransform: 'uppercase',
+                letterSpacing: '1.4px',
+              }}
+            >
               Novo usuário
             </p>
             <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -146,8 +204,8 @@ export default function AdminUsers({ onBack }) {
                 value={createForm.email}
                 onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
                 style={inputStyle}
-                onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-                onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+                onFocus={inputFocus}
+                onBlur={inputBlur}
               />
               <input
                 type="password"
@@ -157,30 +215,54 @@ export default function AdminUsers({ onBack }) {
                 value={createForm.password}
                 onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
                 style={inputStyle}
-                onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-                onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+                onFocus={inputFocus}
+                onBlur={inputBlur}
               />
               <select
                 value={createForm.role}
                 onChange={(e) => setCreateForm({ ...createForm, role: e.target.value })}
-                style={selectStyle}
+                style={{ ...inputStyle, cursor: 'pointer' }}
               >
                 <option value="user">Usuário</option>
                 <option value="admin">Admin</option>
               </select>
-              {createError && <p style={{ fontSize: '12px', color: '#c25b4a', margin: 0 }}>{createError}</p>}
+              {createError && (
+                <p style={{ fontSize: '12px', color: '#e05040', margin: 0 }}>{createError}</p>
+              )}
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   type="submit"
                   disabled={createLoading}
-                  style={{ background: '#292524', color: '#fafaf9', border: 'none', borderRadius: '8px', padding: '9px 18px', fontSize: '12px', fontWeight: 600, fontFamily: 'inherit', cursor: createLoading ? 'not-allowed' : 'pointer' }}
+                  style={{
+                    background: createLoading ? '#2a2420' : '#f07820',
+                    color: createLoading ? '#4a433d' : '#0d0c0a',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '9px 18px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    fontFamily: 'inherit',
+                    cursor: createLoading ? 'not-allowed' : 'pointer',
+                  }}
                 >
                   {createLoading ? 'Criando…' : 'Criar'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCreate(false)}
-                  style={{ background: 'none', border: '1px solid #e8e5e0', borderRadius: '8px', padding: '9px 18px', fontSize: '12px', color: '#78716c', fontFamily: 'inherit', cursor: 'pointer' }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid #242018',
+                    borderRadius: '8px',
+                    padding: '9px 18px',
+                    fontSize: '12px',
+                    color: '#6b6058',
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'border-color 150ms, color 150ms',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#3a3530'; e.currentTarget.style.color = '#b0a899' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#242018'; e.currentTarget.style.color = '#6b6058' }}
                 >
                   Cancelar
                 </button>
@@ -190,20 +272,56 @@ export default function AdminUsers({ onBack }) {
         )}
 
         {/* Error */}
-        {error && <p style={{ fontSize: '12px', color: '#c25b4a', marginBottom: '12px' }}>{error}</p>}
+        {error && (
+          <p
+            style={{
+              fontSize: '12px',
+              color: '#e05040',
+              marginBottom: '12px',
+              padding: '8px 12px',
+              background: 'rgba(224,80,64,0.08)',
+              borderRadius: '8px',
+              border: '1px solid rgba(224,80,64,0.15)',
+            }}
+          >
+            {error}
+          </p>
+        )}
 
         {/* User list */}
-        <div style={{ background: '#fffffe', border: '1px solid #e8e5e0', borderRadius: '12px', overflow: 'hidden' }}>
+        <div
+          style={{
+            background: '#131110',
+            border: '1px solid #242018',
+            borderRadius: '12px',
+            overflow: 'hidden',
+          }}
+        >
           {loading ? (
-            <p style={{ padding: '24px', fontSize: '13px', color: '#a8a29e', textAlign: 'center' }}>Carregando…</p>
+            <p style={{ padding: '24px', fontSize: '13px', color: '#4a433d', textAlign: 'center' }}>
+              Carregando…
+            </p>
           ) : users.length === 0 ? (
-            <p style={{ padding: '24px', fontSize: '13px', color: '#a8a29e', textAlign: 'center' }}>Nenhum usuário encontrado.</p>
+            <p style={{ padding: '24px', fontSize: '13px', color: '#4a433d', textAlign: 'center' }}>
+              Nenhum usuário encontrado.
+            </p>
           ) : (
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #e8e5e0' }}>
+                <tr style={{ borderBottom: '1px solid #242018' }}>
                   {['Email', 'Role', 'Criado em', 'Ações'].map((h) => (
-                    <th key={h} style={{ padding: '10px 16px', fontSize: '10px', fontWeight: 700, color: '#a8a29e', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'left' }}>
+                    <th
+                      key={h}
+                      style={{
+                        padding: '10px 16px',
+                        fontSize: '9px',
+                        fontWeight: 700,
+                        color: '#3a3530',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1.4px',
+                        textAlign: 'left',
+                      }}
+                    >
                       {h}
                     </th>
                   ))}
@@ -212,27 +330,61 @@ export default function AdminUsers({ onBack }) {
               <tbody>
                 {users.map((u, i) => (
                   <React.Fragment key={u._id}>
-                    <tr style={{ borderBottom: i < users.length - 1 ? '1px solid #f0ede8' : 'none', background: editId === u._id ? '#fafaf9' : 'transparent' }}>
-                      <td style={{ padding: '12px 16px', fontSize: '13px', color: '#44403c' }}>{u.email}</td>
+                    <tr
+                      style={{
+                        borderBottom: i < users.length - 1 ? '1px solid #1a1815' : 'none',
+                        background: editId === u._id ? 'rgba(240,120,32,0.04)' : 'transparent',
+                      }}
+                    >
+                      <td style={{ padding: '12px 16px', fontSize: '13px', color: '#b0a899' }}>{u.email}</td>
                       <td style={{ padding: '12px 16px' }}>
-                        <span style={{ fontSize: '10px', fontWeight: 600, borderRadius: '4px', padding: '2px 7px', ...ROLE_BADGE[u.role] }}>
+                        <span
+                          style={{
+                            fontSize: '10px',
+                            fontWeight: 600,
+                            borderRadius: '4px',
+                            padding: '2px 8px',
+                            ...ROLE_BADGE[u.role],
+                          }}
+                        >
                           {u.role}
                         </span>
                       </td>
-                      <td style={{ padding: '12px 16px', fontSize: '12px', color: '#a8a29e' }}>{formatDate(u.createdAt)}</td>
+                      <td style={{ padding: '12px 16px', fontSize: '12px', color: '#4a433d' }}>
+                        {formatDate(u.createdAt)}
+                      </td>
                       <td style={{ padding: '12px 16px' }}>
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '12px' }}>
                           <button
                             onClick={() => editId === u._id ? setEditId(null) : openEdit(u)}
-                            style={{ fontSize: '11px', color: '#d6a96a', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}
+                            style={{
+                              fontSize: '11px',
+                              color: '#f07820',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontFamily: 'inherit',
+                              fontWeight: 600,
+                              transition: 'color 150ms',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = '#ffa050')}
+                            onMouseLeave={(e) => (e.currentTarget.style.color = '#f07820')}
                           >
                             {editId === u._id ? 'Cancelar' : 'Editar'}
                           </button>
                           <button
                             onClick={() => setDeleteConfirm(u._id)}
-                            style={{ fontSize: '11px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = '#c25b4a')}
-                            onMouseLeave={(e) => (e.currentTarget.style.color = '#a8a29e')}
+                            style={{
+                              fontSize: '11px',
+                              color: '#3a3530',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontFamily: 'inherit',
+                              transition: 'color 150ms',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = '#e05040')}
+                            onMouseLeave={(e) => (e.currentTarget.style.color = '#3a3530')}
                           >
                             Remover
                           </button>
@@ -241,17 +393,20 @@ export default function AdminUsers({ onBack }) {
                     </tr>
 
                     {editId === u._id && (
-                      <tr>
+                      <tr style={{ background: 'rgba(240,120,32,0.02)' }}>
                         <td colSpan={4} style={{ padding: '0 16px 16px' }}>
-                          <form onSubmit={handleEdit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '12px' }}>
+                          <form
+                            onSubmit={handleEdit}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '12px' }}
+                          >
                             <input
                               type="email"
                               required
                               value={editForm.email}
                               onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                               style={inputStyle}
-                              onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-                              onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+                              onFocus={inputFocus}
+                              onBlur={inputBlur}
                             />
                             <input
                               type="password"
@@ -260,23 +415,35 @@ export default function AdminUsers({ onBack }) {
                               value={editForm.password}
                               onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
                               style={inputStyle}
-                              onFocus={(e) => (e.target.style.borderColor = '#d6a96a')}
-                              onBlur={(e) => (e.target.style.borderColor = '#e8e5e0')}
+                              onFocus={inputFocus}
+                              onBlur={inputBlur}
                             />
                             <select
                               value={editForm.role}
                               onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
-                              style={selectStyle}
+                              style={{ ...inputStyle, cursor: 'pointer' }}
                             >
                               <option value="user">Usuário</option>
                               <option value="admin">Admin</option>
                             </select>
-                            {editError && <p style={{ fontSize: '12px', color: '#c25b4a', margin: 0 }}>{editError}</p>}
+                            {editError && (
+                              <p style={{ fontSize: '12px', color: '#e05040', margin: 0 }}>{editError}</p>
+                            )}
                             <div style={{ display: 'flex', gap: '8px' }}>
                               <button
                                 type="submit"
                                 disabled={editLoading}
-                                style={{ background: '#292524', color: '#fafaf9', border: 'none', borderRadius: '8px', padding: '8px 16px', fontSize: '12px', fontWeight: 600, fontFamily: 'inherit', cursor: editLoading ? 'not-allowed' : 'pointer' }}
+                                style={{
+                                  background: editLoading ? '#2a2420' : '#f07820',
+                                  color: editLoading ? '#4a433d' : '#0d0c0a',
+                                  border: 'none',
+                                  borderRadius: '8px',
+                                  padding: '8px 16px',
+                                  fontSize: '12px',
+                                  fontWeight: 700,
+                                  fontFamily: 'inherit',
+                                  cursor: editLoading ? 'not-allowed' : 'pointer',
+                                }}
                               >
                                 {editLoading ? 'Salvando…' : 'Salvar'}
                               </button>
@@ -292,24 +459,72 @@ export default function AdminUsers({ onBack }) {
           )}
         </div>
 
-        {/* Delete confirmation */}
+        {/* Delete confirmation modal */}
         {deleteConfirm && (
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(28,25,23,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-            <div style={{ background: '#fffffe', borderRadius: '12px', padding: '28px 24px', maxWidth: '360px', width: '100%', boxShadow: '0 8px 32px rgba(28,25,23,0.16)' }}>
-              <p style={{ fontSize: '14px', fontWeight: 600, color: '#1c1917', marginBottom: '8px' }}>Remover usuário?</p>
-              <p style={{ fontSize: '13px', color: '#78716c', marginBottom: '20px' }}>Esta ação não pode ser desfeita.</p>
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.7)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 50,
+              backdropFilter: 'blur(4px)',
+            }}
+          >
+            <div
+              style={{
+                background: '#131110',
+                border: '1px solid #242018',
+                borderRadius: '14px',
+                padding: '28px 24px',
+                maxWidth: '360px',
+                width: '100%',
+                boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+              }}
+            >
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#ede8df', marginBottom: '8px' }}>
+                Remover usuário?
+              </p>
+              <p style={{ fontSize: '13px', color: '#6b6058', marginBottom: '24px' }}>
+                Esta ação não pode ser desfeita.
+              </p>
               <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  style={{ background: 'none', border: '1px solid #e8e5e0', borderRadius: '8px', padding: '9px 16px', fontSize: '12px', color: '#78716c', fontFamily: 'inherit', cursor: 'pointer' }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid #242018',
+                    borderRadius: '8px',
+                    padding: '9px 16px',
+                    fontSize: '12px',
+                    color: '#6b6058',
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'border-color 150ms, color 150ms',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#3a3530'; e.currentTarget.style.color = '#b0a899' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#242018'; e.currentTarget.style.color = '#6b6058' }}
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={() => handleDelete(deleteConfirm)}
-                  style={{ background: '#c25b4a', color: '#fffffe', border: 'none', borderRadius: '8px', padding: '9px 16px', fontSize: '12px', fontWeight: 600, fontFamily: 'inherit', cursor: 'pointer' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = '#a84a3a')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = '#c25b4a')}
+                  style={{
+                    background: '#e05040',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '9px 16px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'background 150ms',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#c03a2c')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = '#e05040')}
                 >
                   Remover
                 </button>

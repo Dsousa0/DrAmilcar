@@ -16,19 +16,20 @@ function NavButton({ active, onClick, children }) {
         display: 'block',
         width: '100%',
         textAlign: 'left',
-        padding: '6px 12px',
+        padding: '7px 12px',
         borderRadius: '6px',
-        fontSize: '11px',
+        fontSize: '12px',
         fontWeight: active ? 600 : 400,
-        color: active ? '#1c1917' : '#a8a29e',
-        background: active ? '#f0ede8' : 'none',
+        color: active ? '#f07820' : '#6b6058',
+        background: active ? 'rgba(240,120,32,0.10)' : 'none',
         border: 'none',
         cursor: 'pointer',
         fontFamily: 'inherit',
         transition: 'all 150ms',
+        letterSpacing: '0.01em',
       }}
-      onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = '#44403c' }}
-      onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = '#a8a29e' }}
+      onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = '#b0a899' }}
+      onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = '#6b6058' }}
     >
       {children}
     </button>
@@ -60,22 +61,36 @@ function MainLayout() {
   const activeTitle = activeConv?.title || 'Nova conversa'
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#fffffe' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: '#0d0c0a' }}>
       {/* Sidebar */}
-      <aside className="w-72 flex flex-col shrink-0" style={{ background: '#fafaf9', borderRight: '1px solid #e8e5e0' }}>
-
+      <aside
+        className="w-72 flex flex-col shrink-0"
+        style={{
+          background: '#131110',
+          borderRight: '1px solid #242018',
+        }}
+      >
         {/* Header */}
-        <div className="px-4 py-4" style={{ borderBottom: '1px solid #e8e5e0' }}>
-          <h1 style={{ fontFamily: "'Lora', serif", fontSize: '18px', fontWeight: 700, color: '#1c1917', letterSpacing: '-0.3px' }}>
-            DrAmilcar
+        <div className="px-4 py-4" style={{ borderBottom: '1px solid #242018' }}>
+          <h1
+            style={{
+              fontFamily: "'Lora', serif",
+              fontSize: '19px',
+              fontWeight: 700,
+              color: '#ede8df',
+              letterSpacing: '-0.3px',
+              lineHeight: 1.2,
+            }}
+          >
+            Dr. <span style={{ color: '#f07820' }}>Theo</span>
           </h1>
-          <p style={{ fontSize: '10px', color: '#a8a29e', marginTop: '3px', fontWeight: 400 }}>
+          <p style={{ fontSize: '10px', color: '#4a433d', marginTop: '3px', fontWeight: 400, letterSpacing: '0.04em' }}>
             base de conhecimento
           </p>
         </div>
 
         {/* Nav tabs */}
-        <div style={{ padding: '8px', borderBottom: '1px solid #e8e5e0', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div style={{ padding: '8px', borderBottom: '1px solid #242018', display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <NavButton active={activeView === 'chat'} onClick={() => setActiveView('chat')}>
             Chat
           </NavButton>
@@ -93,17 +108,40 @@ function MainLayout() {
         />
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: '1px solid #e8e5e0' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
-            <p style={{ fontSize: '10px', color: '#a8a29e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>
+        <div
+          className="flex items-center justify-between px-4 py-3"
+          style={{ borderTop: '1px solid #242018', marginTop: 'auto' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', overflow: 'hidden' }}>
+            <p
+              style={{
+                fontSize: '10px',
+                color: '#4a433d',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '160px',
+              }}
+            >
               {user?.email}
             </p>
             {isAdmin && (
               <button
                 onClick={() => setAdminView(true)}
-                style={{ fontSize: '10px', color: '#d6a96a', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', padding: '0', fontWeight: 600 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#c4954f')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#d6a96a')}
+                style={{
+                  fontSize: '10px',
+                  color: '#f07820',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  textAlign: 'left',
+                  padding: '0',
+                  fontWeight: 600,
+                  letterSpacing: '0.02em',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffa050')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#f07820')}
               >
                 Usuários
               </button>
@@ -111,9 +149,17 @@ function MainLayout() {
           </div>
           <button
             onClick={logout}
-            style={{ fontSize: '10px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
-            onMouseEnter={(e) => (e.target.style.color = '#c25b4a')}
-            onMouseLeave={(e) => (e.target.style.color = '#a8a29e')}
+            style={{
+              fontSize: '10px',
+              color: '#4a433d',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              transition: 'color 150ms',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#e05040')}
+            onMouseLeave={(e) => (e.target.style.color = '#4a433d')}
           >
             sair
           </button>
