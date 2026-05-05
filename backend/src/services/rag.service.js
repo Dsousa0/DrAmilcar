@@ -51,9 +51,11 @@ async function streamAnswer({ chunks, question, onToken, onDone }) {
       logger.debug({ model: modelName }, 'Stream completed')
       return
     } catch (err) {
-      const isRateLimit = err.status === 429 || err.message?.includes('rate limit') || err.message?.includes('rate-limited')
-      if (isRateLimit && modelName !== modelsToTry.at(-1)) {
-        logger.warn({ model: modelName, fallback: modelsToTry[modelsToTry.indexOf(modelName) + 1] }, 'Rate limit hit, switching to fallback model')
+      const isRetryable = err.status === 429 || err.status === 404 ||
+        err.message?.includes('rate limit') || err.message?.includes('rate-limited') ||
+        err.message?.includes('No endpoints found')
+      if (isRetryable && modelName !== modelsToTry.at(-1)) {
+        logger.warn({ model: modelName, fallback: modelsToTry[modelsToTry.indexOf(modelName) + 1], status: err.status }, 'Model unavailable, switching to fallback')
       } else {
         throw err
       }
