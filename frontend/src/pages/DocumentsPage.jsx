@@ -1,7 +1,7 @@
 import UploadZone from '../components/Upload/UploadZone.jsx'
 import DocumentList from '../components/Documents/DocumentList.jsx'
 
-export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgress, documents, loading, error, onRemove }) {
+export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgress, uploadQueue, documents, loading, error, onRemove }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', background: '#0d0c0a' }}>
       <div
@@ -32,7 +32,7 @@ export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgre
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
         {isAdmin && (
           <div style={{ marginBottom: '20px' }}>
-            <UploadZone onUpload={upload} uploading={uploading} progress={uploadProgress} />
+            <UploadZone onUpload={upload} uploading={uploading} progress={uploadProgress} queue={uploadQueue} />
             {error && (
               <p
                 style={{

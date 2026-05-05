@@ -1,20 +1,25 @@
 import { useRef, useState } from 'react'
 import ProgressBar from './ProgressBar.jsx'
 
-export default function UploadZone({ onUpload, uploading, progress }) {
+export default function UploadZone({ onUpload, uploading, progress, queue }) {
   const inputRef = useRef(null)
   const [dragging, setDragging] = useState(false)
 
-  function handleFile(file) {
-    if (!file || file.type !== 'application/pdf') return
-    onUpload(file)
+  function handleFiles(files) {
+    const pdfs = Array.from(files).filter((f) => f.type === 'application/pdf')
+    if (pdfs.length === 0) return
+    onUpload(pdfs)
   }
 
   function handleDrop(e) {
     e.preventDefault()
     setDragging(false)
-    handleFile(e.dataTransfer.files[0])
+    handleFiles(e.dataTransfer.files)
   }
+
+  const queueLabel = queue?.total > 1
+    ? `Enviando ${queue.current} de ${queue.total}…`
+    : 'Enviando…'
 
   return (
     <div style={{ padding: '8px 10px' }}>
@@ -47,14 +52,15 @@ export default function UploadZone({ onUpload, uploading, progress }) {
         }}
       >
         <p style={{ fontSize: '10px', color: '#4a433d' }}>
-          {uploading ? 'Enviando…' : 'Soltar PDF ou clicar'}
+          {uploading ? queueLabel : 'Soltar PDFs ou clicar (múltiplos permitidos)'}
         </p>
         <input
           ref={inputRef}
           type="file"
           accept="application/pdf"
+          multiple
           className="hidden"
-          onChange={(e) => handleFile(e.target.files[0])}
+          onChange={(e) => handleFiles(e.target.files)}
           disabled={uploading}
         />
       </div>

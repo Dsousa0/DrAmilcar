@@ -40,7 +40,7 @@ function MainLayout() {
   const { user, isAdmin, logout } = useAuth()
   const [adminView, setAdminView] = useState(false)
   const [activeView, setActiveView] = useState('chat')
-  const { documents, loading: docsLoading, uploading, uploadProgress, error: docsError, upload, remove } = useDocuments()
+  const { documents, loading: docsLoading, uploading, uploadProgress, uploadQueue, error: docsError, upload, remove } = useDocuments()
   const {
     conversations,
     activeId,
@@ -185,6 +185,7 @@ function MainLayout() {
             upload={upload}
             uploading={uploading}
             uploadProgress={uploadProgress}
+            uploadQueue={uploadQueue}
             documents={documents}
             loading={docsLoading}
             error={docsError}
