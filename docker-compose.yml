@@ -4,10 +4,11 @@ services:
   frontend-build:
     build:
       context: ./frontend
-      target: production
+      target: builder
     volumes:
-      - frontend_build:/dist
-    command: sh -c "cp -r /dist/. /dist-vol/"
+      - frontend_build:/output
+    command: sh -c "rm -rf /output/* && cp -r /app/dist/. /output/"
+    restart: "no"
 
   nginx:
     image: nginx:1.25-alpine
@@ -15,7 +16,7 @@ services:
       - "8080:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - frontend_build:/usr/share/nginx/html:ro
+      - frontend_build:/usr/share/nginx/html
     depends_on:
       - frontend-build
       - backend
