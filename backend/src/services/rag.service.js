@@ -17,12 +17,10 @@ function buildPrompt(chunks, question) {
   }
 }
 
-async function streamAnswer({ chunks, question, onToken, onDone }) {
-  const { system, user } = buildPrompt(chunks, question)
-
-  const llm = new ChatOpenAI({
+function buildLLM(modelName) {
+  return new ChatOpenAI({
     openAIApiKey: env.OPENROUTER_API_KEY,
-    modelName: env.LLM_MODEL,
+    modelName,
     streaming: true,
     maxTokens: 2048,
     configuration: {
@@ -32,19 +30,35 @@ async function streamAnswer({ chunks, question, onToken, onDone }) {
       },
     },
   })
+}
 
-  const stream = await llm.stream([
+async function streamAnswer({ chunks, question, onToken, onDone }) {
+  const { system, user } = buildPrompt(chunks, question)
+  const messages = [
     { role: 'system', content: system },
     { role: 'user', content: user },
-  ])
+  ]
 
-  for await (const chunk of stream) {
-    const token = chunk.content
-    if (token) onToken(token)
+  const modelsToTry = [env.LLM_MODEL, env.LLM_FALLBACK_MODEL].filter(Boolean)
+
+  for (const modelName of modelsToTry) {
+    try {
+      const stream = await buildLLM(modelName).stream(messages)
+      for await (const chunk of stream) {
+        if (chunk.content) onToken(chunk.content)
+      }
+      await onDone()
+      logger.debug({ model: modelName }, 'Stream completed')
+      return
+    } catch (err) {
+      const isRateLimit = err.status === 429 || err.message?.includes('rate limit') || err.message?.includes('rate-limited')
+      if (isRateLimit && modelName !== modelsToTry.at(-1)) {
+        logger.warn({ model: modelName, fallback: modelsToTry[modelsToTry.indexOf(modelName) + 1] }, 'Rate limit hit, switching to fallback model')
+      } else {
+        throw err
+      }
+    }
   }
-
-  await onDone()
-  logger.debug({ model: env.LLM_MODEL }, 'Stream completed')
 }
 
 module.exports = { buildPrompt, streamAnswer }

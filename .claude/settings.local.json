@@ -50,7 +50,13 @@
       "Bash(gh pr *)",
       "Bash(gh api *)",
       "Bash(git show *)",
-      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f'Issue: {c[\\\\\"issue_url\\\\\"]}\\\\nAuthor: {c[\\\\\"user\\\\\"][\\\\\"login\\\\\"]}\\\\nDate: {c[\\\\\"created_at\\\\\"]}\\\\nBody: {c[\\\\\"body\\\\\"]}\\\\n---'\\) for c in data]\")"
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f'Issue: {c[\\\\\"issue_url\\\\\"]}\\\\nAuthor: {c[\\\\\"user\\\\\"][\\\\\"login\\\\\"]}\\\\nDate: {c[\\\\\"created_at\\\\\"]}\\\\nBody: {c[\\\\\"body\\\\\"]}\\\\n---'\\) for c in data]\")",
+      "WebSearch",
+      "Bash(gh repo *)",
+      "Bash(gh.exe --version)",
+      "Bash(gh.exe repo *)",
+      "Bash(gh.exe pr *)",
+      "Bash(where.exe gh *)"
     ]
   }
 }

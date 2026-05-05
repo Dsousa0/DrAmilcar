@@ -9,6 +9,7 @@ const schema = z.object({
   OPENROUTER_API_KEY: z.string().min(1),
   OPENROUTER_BASE_URL: z.string().url().default('https://openrouter.ai/api/v1'),
   LLM_MODEL: z.string().default('openai/gpt-4o'),
+  LLM_FALLBACK_MODEL: z.string().optional(),
   EMBEDDING_MODEL: z.string().default('openai/text-embedding-3-small'),
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('24h'),
