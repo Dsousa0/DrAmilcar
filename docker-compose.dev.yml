@@ -30,7 +30,7 @@ services:
       context: ./backend
       target: development
     ports:
-      - "3000:3000"
+      - "3002:3000"
     volumes:
       - ./backend/src:/app/src
     env_file:
@@ -54,7 +54,7 @@ services:
     volumes:
       - ./frontend/src:/app/src
     environment:
-      - VITE_API_URL=http://localhost:3000
+      - VITE_API_URL=http://localhost:3002
 
 volumes:
   mongo_dev_data:
