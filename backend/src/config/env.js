@@ -14,6 +14,7 @@ const schema = z.object({
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('24h'),
   UPLOAD_LIMIT_MB: z.coerce.number().default(250),
+  RAG_CHUNKS: z.coerce.number().default(12),
   CORS_ORIGIN: z.string().optional(),
   ADMIN_EMAIL: z.string().email().optional(),
   ADMIN_PASSWORD: z.string().min(6).optional(),

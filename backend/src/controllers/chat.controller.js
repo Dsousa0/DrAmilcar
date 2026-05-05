@@ -3,6 +3,7 @@ const { queryChunks } = require('../services/vector.service')
 const { streamAnswer } = require('../services/rag.service')
 const { appendMessages } = require('../services/conversation.service')
 const Document = require('../models/Document.model')
+const env = require('../config/env')
 const logger = require('../utils/logger')
 
 async function streamChat(req, res) {
@@ -33,7 +34,7 @@ async function streamChat(req, res) {
 
   try {
     const queryEmbedding = await embedQuery(question)
-    const chunks = await queryChunks({ queryEmbedding, nResults: 5 })
+    const chunks = await queryChunks({ queryEmbedding, nResults: env.RAG_CHUNKS })
 
     if (chunks.length === 0) {
       const fallback = 'Não encontrei informações relevantes nos seus documentos.'
