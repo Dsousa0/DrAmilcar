@@ -23,6 +23,7 @@ function buildLLM(modelName) {
     modelName,
     streaming: true,
     maxTokens: 2048,
+    maxRetries: 0,
     configuration: {
       baseURL: env.OPENROUTER_BASE_URL,
       defaultHeaders: {
@@ -39,7 +40,10 @@ async function streamAnswer({ chunks, question, onToken, onDone }) {
     { role: 'user', content: user },
   ]
 
-  const modelsToTry = [env.LLM_MODEL, env.LLM_FALLBACK_MODEL].filter(Boolean)
+  const fallbacks = env.LLM_FALLBACK_MODEL
+    ? env.LLM_FALLBACK_MODEL.split(',').map(m => m.trim()).filter(Boolean)
+    : []
+  const modelsToTry = [env.LLM_MODEL, ...fallbacks].filter(Boolean)
 
   for (const modelName of modelsToTry) {
     try {
