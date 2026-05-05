@@ -43,6 +43,7 @@ export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgre
                   background: 'rgba(224,80,64,0.08)',
                   borderRadius: '6px',
                   border: '1px solid rgba(224,80,64,0.15)',
+                  whiteSpace: 'pre-line',
                 }}
               >
                 {error}

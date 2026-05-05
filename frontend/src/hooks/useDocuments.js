@@ -28,6 +28,7 @@ export function useDocuments() {
     const fileArray = Array.from(files)
     setUploading(true)
     setError('')
+    const failed = []
 
     for (let i = 0; i < fileArray.length; i++) {
       setUploadProgress(0)
@@ -42,8 +43,8 @@ export function useDocuments() {
           },
         })
       } catch (err) {
-        setError(err.response?.data?.error?.message || `Falha no upload de "${fileArray[i].name}".`)
-        break
+        const reason = err.response?.data?.error?.message || 'Falha no upload'
+        failed.push(`${fileArray[i].name}: ${reason}`)
       }
     }
 
@@ -51,6 +52,7 @@ export function useDocuments() {
     setUploading(false)
     setUploadProgress(0)
     setUploadQueue({ current: 0, total: 0 })
+    if (failed.length > 0) setError(failed.join('\n'))
   }, [fetchDocuments])
 
   const remove = useCallback(async (id) => {
