@@ -5,9 +5,22 @@ const { initChroma } = require('./config/chroma')
 const logger = require('./utils/logger')
 const env = require('./config/env')
 
+async function seedAdmin() {
+  if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD) return
+  const User = require('./models/User.model')
+  const bcrypt = require('bcrypt')
+  const exists = await User.findOne({ email: env.ADMIN_EMAIL })
+  if (exists) return
+  const passwordHash = await bcrypt.hash(env.ADMIN_PASSWORD, 12)
+  await User.create({ email: env.ADMIN_EMAIL, passwordHash, role: 'admin' })
+  logger.info({ email: env.ADMIN_EMAIL }, 'Admin user created')
+}
+
 async function start() {
   await connectMongo()
   logger.info('MongoDB connected')
+
+  await seedAdmin()
 
   await initChroma()
   logger.info('ChromaDB connected')

@@ -15,6 +15,8 @@ const schema = z.object({
   JWT_EXPIRES_IN: z.string().default('24h'),
   UPLOAD_LIMIT_MB: z.coerce.number().default(250),
   CORS_ORIGIN: z.string().optional(),
+  ADMIN_EMAIL: z.string().email().optional(),
+  ADMIN_PASSWORD: z.string().min(6).optional(),
 })
 
 const parsed = schema.safeParse(process.env)
