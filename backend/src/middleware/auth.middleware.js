@@ -27,4 +27,16 @@ function requireAdmin(req, res, next) {
   next()
 }
 
-module.exports = { authenticate, requireAdmin }
+function requirePasswordChanged(req, res, next) {
+  if (req.user?.mustChangePassword) {
+    return res.status(403).json({
+      error: {
+        code: 'PASSWORD_CHANGE_REQUIRED',
+        message: 'Você precisa trocar a senha antes de continuar.',
+      },
+    })
+  }
+  next()
+}
+
+module.exports = { authenticate, requireAdmin, requirePasswordChanged }

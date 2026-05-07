@@ -1,9 +1,9 @@
 const { Router } = require('express')
-const { authenticate } = require('../middleware/auth.middleware')
+const { authenticate, requirePasswordChanged } = require('../middleware/auth.middleware')
 const { streamChat } = require('../controllers/chat.controller')
 
 const router = Router()
-router.use(authenticate)
+router.use(authenticate, requirePasswordChanged)
 router.post('/stream', streamChat)
 
 module.exports = router

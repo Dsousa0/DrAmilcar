@@ -3,6 +3,11 @@ import api from '../services/api'
 
 const AuthContext = createContext(null)
 
+function persistSession(token, user) {
+  localStorage.setItem('token', token)
+  localStorage.setItem('user', JSON.stringify(user))
+}
+
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('token'))
   const [user, setUser] = useState(() => {
@@ -14,13 +19,16 @@ export function AuthProvider({ children }) {
     }
   })
 
+  const applySession = useCallback((nextToken, nextUser) => {
+    persistSession(nextToken, nextUser)
+    setToken(nextToken)
+    setUser(nextUser)
+  }, [])
+
   const login = useCallback(async (email, password) => {
     const { data } = await api.post('/auth/login', { email, password })
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('user', JSON.stringify(data.user))
-    setToken(data.token)
-    setUser(data.user)
-  }, [])
+    applySession(data.token, data.user)
+  }, [applySession])
 
   const logout = useCallback(() => {
     localStorage.removeItem('token')
@@ -30,9 +38,10 @@ export function AuthProvider({ children }) {
   }, [])
 
   const isAdmin = user?.role === 'admin'
+  const mustChangePassword = !!user?.mustChangePassword
 
   return (
-    <AuthContext.Provider value={{ token, user, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ token, user, isAdmin, mustChangePassword, login, logout, applySession }}>
       {children}
     </AuthContext.Provider>
   )

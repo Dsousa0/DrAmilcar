@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
+  mustChangePassword: { type: Boolean, default: false },
 }, { timestamps: true })
 
 userSchema.set('toJSON', {

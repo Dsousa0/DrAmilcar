@@ -38,6 +38,11 @@ export async function getConversation(id) {
   return data
 }
 
+export async function changePassword(currentPassword, newPassword) {
+  const { data } = await api.post('/auth/change-password', { currentPassword, newPassword })
+  return data
+}
+
 export async function getUsers() {
   const { data } = await api.get('/admin/users')
   return data.data

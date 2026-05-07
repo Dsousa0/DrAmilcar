@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { authenticate } = require('../middleware/auth.middleware')
+const { authenticate, requirePasswordChanged } = require('../middleware/auth.middleware')
 const { upload } = require('../middleware/upload.middleware')
 const { list, create, get, remove } = require('../controllers/conversations.controller')
 const {
@@ -8,7 +8,7 @@ const {
 } = require('../controllers/documents.controller')
 
 const router = Router()
-router.use(authenticate)
+router.use(authenticate, requirePasswordChanged)
 router.get('/', list)
 router.post('/', create)
 router.get('/:id', get)

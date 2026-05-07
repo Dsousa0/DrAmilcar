@@ -29,7 +29,7 @@ async function createUser(req, res, next) {
       })
     }
     const passwordHash = await hashPassword(password)
-    const user = await User.create({ email, passwordHash, role })
+    const user = await User.create({ email, passwordHash, role, mustChangePassword: true })
     res.status(201).json(user)
   } catch (err) {
     next(err)
@@ -60,6 +60,9 @@ async function updateUser(req, res, next) {
 
     if (password) {
       user.passwordHash = await hashPassword(password)
+      if (user._id.toString() !== req.user.userId) {
+        user.mustChangePassword = true
+      }
     }
 
     if (role) {

@@ -75,7 +75,7 @@ describe('POST /api/admin/users', () => {
     expect(res.status).toBe(403)
   })
 
-  it('creates a user as admin', async () => {
+  it('creates a user as admin and flags mustChangePassword', async () => {
     const res = await request(app)
       .post('/api/admin/users')
       .set('Authorization', `Bearer ${adminToken}`)
@@ -83,6 +83,7 @@ describe('POST /api/admin/users', () => {
     expect(res.status).toBe(201)
     expect(res.body.email).toBe('new@test.com')
     expect(res.body.role).toBe('user')
+    expect(res.body.mustChangePassword).toBe(true)
     expect(res.body.passwordHash).toBeUndefined()
   })
 
@@ -111,6 +112,24 @@ describe('PATCH /api/admin/users/:id', () => {
       .send({ email: 'updated@test.com' })
     expect(res.status).toBe(200)
     expect(res.body.email).toBe('updated@test.com')
+  })
+
+  it('forces mustChangePassword when admin resets another user password', async () => {
+    const res = await request(app)
+      .patch(`/api/admin/users/${userId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ password: 'reset_by_admin' })
+    expect(res.status).toBe(200)
+    expect(res.body.mustChangePassword).toBe(true)
+  })
+
+  it('does not force mustChangePassword when admin resets own password', async () => {
+    const res = await request(app)
+      .patch(`/api/admin/users/${adminId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ password: 'self_reset_pass' })
+    expect(res.status).toBe(200)
+    expect(res.body.mustChangePassword).toBe(false)
   })
 
   it('returns 404 for non-existent user', async () => {

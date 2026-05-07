@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import Login from './pages/Login.jsx'
 import AdminUsers from './pages/AdminUsers.jsx'
+import ChangePassword from './pages/ChangePassword.jsx'
 import { useDocuments } from './hooks/useDocuments.js'
 import { useConversations } from './hooks/useConversations.js'
 import ConversationList from './components/Conversations/ConversationList.jsx'
@@ -158,6 +159,8 @@ function MainLayout() {
 }
 
 export default function App() {
-  const { token } = useAuth()
-  return token ? <MainLayout /> : <Login />
+  const { token, mustChangePassword } = useAuth()
+  if (!token) return <Login />
+  if (mustChangePassword) return <ChangePassword />
+  return <MainLayout />
 }
