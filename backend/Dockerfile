@@ -12,6 +12,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 COPY src/ ./src/
+COPY scripts/ ./scripts/
 RUN mkdir -p /home/node/.cache && chown -R node:node /home/node
 ENV TRANSFORMERS_CACHE=/home/node/.cache
 USER node
