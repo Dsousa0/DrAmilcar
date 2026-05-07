@@ -30,8 +30,9 @@ export function useDocuments(conversationId) {
     fetchDocuments()
   }, [fetchDocuments])
 
-  const upload = useCallback(async (files) => {
-    if (!conversationId) {
+  const upload = useCallback(async (files, explicitConversationId) => {
+    const targetId = explicitConversationId || conversationId
+    if (!targetId) {
       setError('Selecione ou crie uma conversa antes de enviar documentos.')
       return
     }
@@ -46,7 +47,7 @@ export function useDocuments(conversationId) {
       try {
         const form = new FormData()
         form.append('file', fileArray[i])
-        await api.post(`/conversations/${conversationId}/documents/upload`, form, {
+        await api.post(`/conversations/${targetId}/documents/upload`, form, {
           headers: { 'Content-Type': 'multipart/form-data' },
           onUploadProgress: (e) => {
             if (e.total) setUploadProgress(Math.round((e.loaded / e.total) * 100))

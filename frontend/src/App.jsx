@@ -2,44 +2,14 @@ import { useState } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import Login from './pages/Login.jsx'
 import AdminUsers from './pages/AdminUsers.jsx'
-import DocumentsPage from './pages/DocumentsPage.jsx'
 import { useDocuments } from './hooks/useDocuments.js'
 import { useConversations } from './hooks/useConversations.js'
 import ConversationList from './components/Conversations/ConversationList.jsx'
 import ChatWindow from './components/Chat/ChatWindow.jsx'
 
-function NavButton({ active, onClick, children }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        display: 'block',
-        width: '100%',
-        textAlign: 'left',
-        padding: '7px 12px',
-        borderRadius: '6px',
-        fontSize: '12px',
-        fontWeight: active ? 600 : 400,
-        color: active ? '#f07820' : '#6b6058',
-        background: active ? 'rgba(240,120,32,0.10)' : 'none',
-        border: 'none',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 150ms',
-        letterSpacing: '0.01em',
-      }}
-      onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = '#b0a899' }}
-      onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = '#6b6058' }}
-    >
-      {children}
-    </button>
-  )
-}
-
 function MainLayout() {
   const { user, isAdmin, logout } = useAuth()
   const [adminView, setAdminView] = useState(false)
-  const [activeView, setActiveView] = useState('chat')
   const {
     conversations,
     activeId,
@@ -51,7 +21,15 @@ function MainLayout() {
     appendTokenToLast,
     refreshList,
   } = useConversations()
-  const { documents, loading: docsLoading, uploading, uploadProgress, uploadQueue, error: docsError, upload, remove } = useDocuments(activeId)
+  const {
+    documents,
+    uploading,
+    uploadProgress,
+    uploadQueue,
+    error: docsError,
+    upload,
+    remove,
+  } = useDocuments(activeId)
 
   if (adminView) {
     return <AdminUsers onBack={() => setAdminView(false)} />
@@ -89,22 +67,12 @@ function MainLayout() {
           </p>
         </div>
 
-        {/* Nav tabs */}
-        <div style={{ padding: '8px', borderBottom: '1px solid #242018', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <NavButton active={activeView === 'chat'} onClick={() => setActiveView('chat')}>
-            Chat
-          </NavButton>
-          <NavButton active={activeView === 'documents'} onClick={() => setActiveView('documents')}>
-            Documentos
-          </NavButton>
-        </div>
-
         {/* Conversations */}
         <ConversationList
           conversations={conversations}
           activeId={activeId}
-          onSelect={(id) => { selectConversation(id); setActiveView('chat') }}
-          onNew={() => { newConversation(); setActiveView('chat') }}
+          onSelect={(id) => selectConversation(id)}
+          onNew={() => newConversation()}
         />
 
         {/* Footer */}
@@ -168,32 +136,22 @@ function MainLayout() {
 
       {/* Main content area */}
       <main className="flex-1 flex flex-col min-w-0">
-        {activeView === 'chat' ? (
-          <ChatWindow
-            messages={messages}
-            conversationId={activeId}
-            activeTitle={activeTitle}
-            docCount={documents.length}
-            appendOptimistic={appendOptimistic}
-            appendTokenToLast={appendTokenToLast}
-            ensureActiveConversation={ensureActiveConversation}
-            refreshList={refreshList}
-          />
-        ) : (
-          <DocumentsPage
-            conversationId={activeId}
-            conversationTitle={activeTitle}
-            ensureActiveConversation={ensureActiveConversation}
-            upload={upload}
-            uploading={uploading}
-            uploadProgress={uploadProgress}
-            uploadQueue={uploadQueue}
-            documents={documents}
-            loading={docsLoading}
-            error={docsError}
-            onRemove={remove}
-          />
-        )}
+        <ChatWindow
+          messages={messages}
+          conversationId={activeId}
+          activeTitle={activeTitle}
+          documents={documents}
+          uploading={uploading}
+          uploadProgress={uploadProgress}
+          uploadQueue={uploadQueue}
+          docsError={docsError}
+          upload={upload}
+          onRemoveDocument={remove}
+          appendOptimistic={appendOptimistic}
+          appendTokenToLast={appendTokenToLast}
+          ensureActiveConversation={ensureActiveConversation}
+          refreshList={refreshList}
+        />
       </main>
     </div>
   )
