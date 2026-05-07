@@ -2,7 +2,7 @@ const { ChatOpenAI } = require('@langchain/openai')
 const env = require('../config/env')
 const logger = require('../utils/logger')
 
-const SYSTEM_TEMPLATE = `Você é um assistente técnico. Use os seguintes trechos de documentos para responder à pergunta do usuário. Se a resposta não estiver no texto, diga que não sabe.
+const SYSTEM_TEMPLATE = `Você é um assistente técnico. Use apenas os trechos abaixo, extraídos dos documentos enviados pelo usuário nesta conversa, para responder à pergunta. Se a resposta não estiver no texto, diga que não sabe.
 
 CONTEXTO:
 ---

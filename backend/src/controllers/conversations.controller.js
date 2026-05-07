@@ -2,6 +2,7 @@ const {
   createConversation,
   listConversations,
   getConversation,
+  deleteConversation,
 } = require('../services/conversation.service')
 
 async function list(req, res, next) {
@@ -32,4 +33,18 @@ async function get(req, res, next) {
   }
 }
 
-module.exports = { list, create, get }
+async function remove(req, res, next) {
+  try {
+    const ok = await deleteConversation(req.user.userId, req.params.id)
+    if (!ok) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Conversation not found' },
+      })
+    }
+    res.status(204).send()
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { list, create, get, remove }

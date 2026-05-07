@@ -1,4 +1,7 @@
 const Conversation = require('../models/Conversation.model')
+const Document = require('../models/Document.model')
+const vectorService = require('./vector.service')
+const logger = require('../utils/logger')
 
 async function createConversation(userId) {
   return Conversation.create({ userId, title: '', messages: [] })
@@ -43,4 +46,16 @@ async function appendMessages(conversationId, userId, userContent, assistantCont
   )
 }
 
-module.exports = { createConversation, listConversations, getConversation, appendMessages }
+async function deleteConversation(userId, conversationId) {
+  const conv = await Conversation.findOne({ _id: conversationId, userId }).select('_id')
+  if (!conv) return false
+
+  await vectorService.deleteConversationChunks({ conversationId }).catch((err) => {
+    logger.error({ err, conversationId }, 'Failed to delete vector chunks for conversation')
+  })
+  await Document.deleteMany({ conversationId, userId })
+  await Conversation.deleteOne({ _id: conversationId, userId })
+  return true
+}
+
+module.exports = { createConversation, listConversations, getConversation, appendMessages, deleteConversation }

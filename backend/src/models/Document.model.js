@@ -7,11 +7,18 @@ const documentSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
+  conversationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conversation',
+    required: true,
+    index: true,
+  },
   originalName: { type: String, required: true },
   sizeBytes: { type: Number, required: true },
   chunkCount: { type: Number, required: true },
-  chromaCollection: { type: String, required: true },
 }, { timestamps: true })
+
+documentSchema.index({ userId: 1, conversationId: 1, createdAt: -1 })
 
 documentSchema.set('toJSON', {
   transform: (_, obj) => {
