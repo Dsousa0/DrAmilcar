@@ -40,7 +40,6 @@ function MainLayout() {
   const { user, isAdmin, logout } = useAuth()
   const [adminView, setAdminView] = useState(false)
   const [activeView, setActiveView] = useState('chat')
-  const { documents, loading: docsLoading, uploading, uploadProgress, uploadQueue, error: docsError, upload, remove } = useDocuments()
   const {
     conversations,
     activeId,
@@ -52,6 +51,7 @@ function MainLayout() {
     appendTokenToLast,
     refreshList,
   } = useConversations()
+  const { documents, loading: docsLoading, uploading, uploadProgress, uploadQueue, error: docsError, upload, remove } = useDocuments(activeId)
 
   if (adminView) {
     return <AdminUsers onBack={() => setAdminView(false)} />
@@ -181,7 +181,9 @@ function MainLayout() {
           />
         ) : (
           <DocumentsPage
-            isAdmin={isAdmin}
+            conversationId={activeId}
+            conversationTitle={activeTitle}
+            ensureActiveConversation={ensureActiveConversation}
             upload={upload}
             uploading={uploading}
             uploadProgress={uploadProgress}

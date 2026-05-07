@@ -1,7 +1,29 @@
+import { useEffect, useState } from 'react'
 import UploadZone from '../components/Upload/UploadZone.jsx'
 import DocumentList from '../components/Documents/DocumentList.jsx'
 
-export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgress, uploadQueue, documents, loading, error, onRemove }) {
+export default function DocumentsPage({
+  conversationId,
+  conversationTitle,
+  ensureActiveConversation,
+  upload,
+  uploading,
+  uploadProgress,
+  uploadQueue,
+  documents,
+  loading,
+  error,
+  onRemove,
+}) {
+  const [creating, setCreating] = useState(false)
+
+  useEffect(() => {
+    if (!conversationId && !creating) {
+      setCreating(true)
+      ensureActiveConversation().finally(() => setCreating(false))
+    }
+  }, [conversationId, ensureActiveConversation, creating])
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', background: '#0d0c0a' }}>
       <div
@@ -20,17 +42,17 @@ export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgre
             letterSpacing: '-0.2px',
           }}
         >
-          {isAdmin ? 'Gerenciar Documentos' : 'Documentos'}
+          Documentos da conversa
         </h2>
         <p style={{ fontSize: '11px', color: '#4a433d', marginTop: '4px' }}>
-          {isAdmin
-            ? 'Faça upload de PDFs para indexar na base de conhecimento.'
-            : 'Documentos disponíveis na base de conhecimento.'}
+          {conversationId
+            ? `Documentos vinculados a "${conversationTitle}". A IA usará apenas estes arquivos para responder.`
+            : 'Selecione ou crie uma conversa para enviar documentos.'}
         </p>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
-        {isAdmin && (
+        {conversationId && (
           <div style={{ marginBottom: '20px' }}>
             <UploadZone onUpload={upload} uploading={uploading} progress={uploadProgress} queue={uploadQueue} />
             {error && (
@@ -69,7 +91,7 @@ export default function DocumentsPage({ isAdmin, upload, uploading, uploadProgre
           documents={documents}
           loading={loading}
           onRemove={onRemove}
-          canDelete={isAdmin}
+          canDelete={!!conversationId}
         />
       </div>
     </div>

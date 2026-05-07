@@ -87,8 +87,8 @@ export default function ChatWindow({
               </div>
               <p style={{ fontSize: '13px', color: '#4a433d', lineHeight: 1.6, maxWidth: '260px' }}>
                 {docCount === 0
-                  ? 'Faça upload de um PDF na barra lateral para começar.'
-                  : 'Faça uma pergunta sobre os documentos indexados.'}
+                  ? 'Envie um PDF nesta conversa para começar.'
+                  : 'Faça uma pergunta sobre os documentos desta conversa.'}
               </p>
             </div>
           </div>
